@@ -9,13 +9,24 @@ import {
 } from "@mantine/core";
 import { ContactIconsList } from "./ContactIcons";
 import { useStyles } from "./ContactStyle";
-import { useState } from "react";
 import { sendContactForm } from "@/lib/api";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+
+//https://github.com/nikitapryymak/next-js-nodemailer/tree/finished-files
 
 const initValues = { name: "", email: "", subject: "", message: "" };
 
-const initState = { isLoading: false, error: "", values: initValues };
+const notificationMessage = {
+  success: {
+    title: "Your email is sent",
+    message: "Thank you for your message and interest",
+  },
+  failed: {
+    title: "Your message was not sent",
+    message: "Please provide information for all required fields",
+  },
+};
 
 export function Contact() {
   const { classes } = useStyles();
@@ -27,26 +38,17 @@ export function Contact() {
       message: "",
     },
   });
-  const [state, setState] = useState(initState);
-  const { values, isLoading, error } = state;
-  const [touched, setTouched] = useState({});
-
-  const onBlur = ({ target }) =>
-    setTouched((prev) => ({ ...prev, [target.name]: true }));
-
-  const handleChange = ({ target }) =>
-    setState((prev) => ({
-      ...prev,
-      values: {
-        ...prev.values,
-        [target.name]: target.value,
-      },
-    }));
 
   const sendMessage = async (data) => {
-    console.log(data);
     try {
       await sendContactForm(data);
+      notifications.show({
+        id: "SubmitEmail",
+        withCloseButton: true,
+        autoClose: 7500,
+        ...notificationMessage.success,
+        loading: false,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +69,7 @@ export function Contact() {
           className={classes.form}
           onSubmit={form.onSubmit((values) => {
             sendMessage(values);
+            form.reset();
           })}
         >
           <Text fz="lg" fw={700} className={classes.title}>
@@ -79,6 +82,7 @@ export function Contact() {
                 {...form.getInputProps("name")}
                 label="Your name"
                 placeholder="Your name"
+                required
               />
               <TextInput
                 type="email"
@@ -88,7 +92,6 @@ export function Contact() {
                 {...form.getInputProps("email")}
               />
             </SimpleGrid>
-
             <TextInput
               mt="md"
               label="Subject"
@@ -96,15 +99,14 @@ export function Contact() {
               required
               {...form.getInputProps("subject")}
             />
-
             <Textarea
               mt="md"
               label="Your message"
               placeholder="Please include all relevant information"
               {...form.getInputProps("message")}
               minRows={3}
+              required
             />
-
             <Group position="right" mt="md">
               <Button type="submit" className={classes.control}>
                 Send message

@@ -9,20 +9,22 @@ import {
   ScrollArea,
   ActionIcon,
   Indicator,
+  Text,
 } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
+import { modals } from "@mantine/modals";
 // import { useFBAuth } from "../../login/FBAuthContext";
 // import ThemeToggler from "../theme/ThemeToggle";
 
 import { useStyles } from "./HeaderMenuStyle";
 import { useFBAuth } from "@/app/(auth)/FBAuthContext";
-import Link from "next/link";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
-import { useEffect } from "react";
+import ContactForm from "@/components/contact/ContactForm";
+import { useContactFormContext } from "@/components/contact/form-context";
 
 const logInMenu = (user, logoutUser, menuType) => {
   if (menuType === "Main") {
@@ -81,7 +83,11 @@ const HeaderMenu = () => {
     return (
       <>
         {menuItems.map((link) => (
-          <a href={link.href} className={classes.link} key={link}>
+          <a
+            href={link.href}
+            className={classes.link}
+            key={`${link.href}+${link.text}`}
+          >
             {link.text}
           </a>
         ))}
@@ -102,18 +108,18 @@ const HeaderMenu = () => {
 
   return (
     <>
-      <Header className={classes.header}>
+      <Header className={classes.header} height="">
         <Group position="apart" sx={{ height: "100%" }}>
           <h1>
-            <a href="/home" className={classes.brand}>
+            <a href="/home" className={classes.brand} key="title">
               Seekers
             </a>
           </h1>
-
           <Group className={classes.hiddenMobile}>
             {links()}
             {logInMenu(user, logoutUser, "Main")}
           </Group>
+          {/* <Button onClick={openModal}>Open confirm modal</Button>; */}
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}

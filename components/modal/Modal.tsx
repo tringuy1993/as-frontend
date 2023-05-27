@@ -4,6 +4,7 @@ export default function ModalComp({ children, opened, open, close }) {
   const { classes } = useStyles();
   return (
     <Modal
+      id="ContactModal"
       classNames={{ body: classes.body, root: classes.root }}
       className={classes.wrapper}
       opened={opened}
