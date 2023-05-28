@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import RootStyleRegistry from "./emotion";
 import { FBAuthProvider } from "./(auth)/FBAuthContext";
 import { MainShell } from "@/components";
-// import { MainShell } from '@/components/Shell'
+import { ModalsProvider } from "@mantine/modals";
+import { Notifications } from "@mantine/notifications";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,10 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <FBAuthProvider>
           <RootStyleRegistry>
-            <MainShell>{children}</MainShell>
+            <ModalsProvider>
+              <Notifications position="top-center" />
+              <MainShell>{children}</MainShell>
+            </ModalsProvider>
           </RootStyleRegistry>
         </FBAuthProvider>
       </body>

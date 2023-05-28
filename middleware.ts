@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 const PUBLIC_FILE = /\.(.*)$/;
 
-const protected_Path = ["/home", "/greektime", "/backtest"];
 const idToken = process.env.NEXT_PUBLIC_COOKIE_NAME;
-export default async function middleware(request) {
+export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // Redirecting / to /home
   const url = request.nextUrl.clone();
   if (url.pathname === "/") {
     url.pathname = "/home";
