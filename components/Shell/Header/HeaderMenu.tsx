@@ -8,8 +8,6 @@ import {
   Drawer,
   ScrollArea,
   ActionIcon,
-  Indicator,
-  Text,
 } from "@mantine/core";
 
 import { useDisclosure } from "@mantine/hooks";
@@ -23,8 +21,6 @@ import { useStyles } from "./HeaderMenuStyle";
 import { useFBAuth } from "@/app/(auth)/FBAuthContext";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
-import ContactForm from "@/components/contact/ContactForm";
-import { useContactFormContext } from "@/components/contact/form-context";
 
 const logInMenu = (user, logoutUser, menuType) => {
   if (menuType === "Main") {
