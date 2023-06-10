@@ -17,6 +17,78 @@ function findClosestIndexBT(list, target) {
     { index: -1, diff: Infinity }
   ).index;
 }
+export function ECOpts_Theo_BT(chartData, greek) {
+  // Setting dimensions and get 'dataset' for Echarts
+  const SGdimensions = ["spot_price", `theo_gamma`];
+  // const dataset = datasets(chartData, [], SGdimensions, []);
+  const dataset = {
+    dimensions: SGdimensions,
+    source: chartData,
+  };
+  const legends = ["$Call", "$Put"];
+  const colors = ["#e01f54", "#0098d9"];
+  // Creating Series that an array of length 4 (put, call, totalgamma, theogamma)
+
+  let series = [
+    {
+      datasetIndex: 0,
+      xAxisIndex: 0,
+      type: "line",
+      barGap: "-100%",
+      itemStyle: { color: colors[0] },
+      name: legends[0],
+    },
+  ];
+
+  // Creating Option for the chart.
+
+  const option = {
+    title: [
+      {
+        // text: ` ${greek} Sum: ${SumTotalGEX}`,
+        left: "center",
+        textStyle: { fontSize: 30 },
+      },
+    ],
+    ...commonOptions,
+    dataZoom: {
+      yAxisIndex: false,
+      xAxisIndex: [0, 0],
+    },
+    grid: [{ left: 30, right: 30, bottom: 30 }],
+    dataset: dataset,
+    series: series,
+    xAxis: [
+      {
+        xAxisIndex: 0,
+        type: "category",
+        axisLabel: {
+          frontWeight: "bold",
+        },
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+        axisLabel: {
+          formatter: function (value) {
+            return formatNumbers(value);
+          },
+          fontWeight: "bold",
+          rotate: 90,
+        },
+        max: function (value) {
+          return value.max;
+        },
+        min: function (value) {
+          return value.min;
+        },
+      },
+    ],
+  };
+
+  return option;
+}
 
 export function ECOpts_BT(chartData, greek) {
   // Setting dimensions and get 'dataset' for Echarts

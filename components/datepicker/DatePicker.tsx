@@ -42,7 +42,6 @@ function DatePicker({ dateRange, onSubmit, BackTest }) {
           allowSingleDateInRange
           value={dateRange}
           {...form.getInputProps("dateRange")}
-          // {BackTest ? null : { excludeDate: disableDatesBeforeThisWeek }}
         ></DatePickerInput>
         <Button type="submit"> Submit Date </Button>
       </Group>

@@ -4,7 +4,7 @@ import { ECOpts_BT } from "./EChartBT_Opts";
 const EChartBT = ({ data, greek }) => {
   let ecOptions;
   if (data) {
-    ecOptions = ECOpts_BT(data, greek);
+    ecOptions = ECOpts_BT(data.greek_exposure, greek);
   }
   return (
     <>

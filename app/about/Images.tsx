@@ -2,49 +2,67 @@
 
 import { Carousel } from "@mantine/carousel";
 import { Paper, Button } from "@mantine/core";
-// import Autoplay from "embla-carousel-autoplay";
+import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
+import Image from "next/image";
 
-import { useStyles } from "./DetailStyles";
-
+import { useStyles } from "./styles";
+type data = {
+  image: string;
+  title: string;
+  category: string;
+  link: string;
+  priority: boolean;
+};
 const data = [
   {
-    image: "/about/img/Me.jpg",
+    image: "/static/images/Me.jpg",
     title: "Pattaya, Thailand",
     category: "Nature",
     link: "https://www.pattayaelephantsanctuary.org/",
+    priority: true,
   },
   {
-    image: "/about/img/Me2.jpg",
+    image: "/static/images/Me2.jpg",
     title: "Hawaii, US",
     category: "Nature",
     link: "https://wailuaheritagetrail.org/",
+    priority: false,
   },
   {
-    image: "/about/img/Me3.jpg",
+    image: "/static/images/Me3.jpg",
     title: "Houston, US",
     category: "Nature",
     link: "https://spacecenter.org/",
+    priority: false,
   },
   {
-    image: "/about/img/Me4.jpg",
+    image: "/static/images/Me4.jpg",
     title: "Alaska, US",
     category: "Nature",
     link: "https://goo.gl/maps/a8qpZHfNtGJgpyGo9",
+    priority: false,
   },
 ];
 
-function Cards({ image, title, link }) {
+const Cards: React.FC<data> = ({ image, title, link, priority }) => {
   const { classes } = useStyles();
   return (
     <Paper
       shadow="md"
       p="xl"
       radius="md"
-      sx={{ backgroundImage: `${image}` }}
-      // sx = {{backgroundImage: `url${image}`}}
       className={classes.card}
+      style={{ objectFit: "cover" }}
     >
+      <Image
+        fill={true}
+        src={image}
+        alt={title}
+        priority={priority}
+        style={{ objectFit: "cover" }}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      ></Image>
       <Button
         variant="white"
         color="dark"
@@ -57,11 +75,11 @@ function Cards({ image, title, link }) {
       </Button>
     </Paper>
   );
-}
+};
 
-export function Images() {
+export const Images: React.FC = () => {
   const { classes } = useStyles();
-  // const autoplay = useRef(Autoplay({ delay: 7500 }));
+  const autoplay = useRef(Autoplay({ delay: 7500 }));
   const slides = data.map((img) => (
     <Carousel.Slide key={img.title}>
       <Cards {...img} />
@@ -70,16 +88,15 @@ export function Images() {
 
   return (
     <Carousel
-      // sx={{ maxWidth: 500 }}
       sx={classes.carousel}
+      classNames={{ viewport: classes.viewport }}
       mx="auto"
       withIndicators
-      // height={500}
-      // plugins={[autoplay.current]}
-      // onMouseEnter={autoplay.current.stop}
-      // onMouseLeave={autoplay.current.reset}
+      plugins={[autoplay.current]}
+      onMouseEnter={autoplay.current.stop}
+      onMouseLeave={autoplay.current.reset}
     >
       {slides}
     </Carousel>
   );
-}
+};

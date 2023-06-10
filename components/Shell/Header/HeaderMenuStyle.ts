@@ -31,10 +31,10 @@ export const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.sm,
 
     [theme.fn.smallerThan("sm")]: {
-      height: 42,
+      // height: 42,
       display: "flex",
       alignItems: "center",
-      width: "100%",
+      // width: "100%",
     },
 
     ...theme.fn.hover({
