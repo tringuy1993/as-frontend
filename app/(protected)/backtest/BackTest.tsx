@@ -1,35 +1,19 @@
 "use client";
 import { useState } from "react";
 import { Grid, Card, useMantineColorScheme } from "@mantine/core";
-
 import { format } from "date-fns";
 import useFetch from "@/app/api/useFetch";
 import { BACKTEST_AVAIL_DATE, BACKTEST_URL } from "@/app/api/apiURLs";
-import { DatePicker, TimePicker, EChartBT } from "@/components";
+import { TimePicker, EChartBT, BTDatePicker } from "@/components";
 import TimeSlider from "@/components/timepicker/TimeSlider";
-
-function getMarkedRanges(data) {
-  const markedRanges = [];
-  if (data?.data) {
-    data?.forEach((item) => {
-      const date = new Date(
-        item.partioned_name.slice(0, 4), // year
-        item.partioned_name.slice(4, 6) - 1, // month (0-based)
-        item.partioned_name.slice(6)
-      ); // day
-      [...markedRanges].push({
-        from: date,
-        to: date,
-        color: "blue",
-      });
-    });
-  }
-
-  return { markedRanges };
-}
+import EChartBT_Theo from "@/components/ECharts/BackTest/EChartBT_Theo";
 
 const BackTest = () => {
-  // const theme = useMantineColorScheme().colorScheme;
+  // const { data: available_dates } = useFetch("", BACKTEST_AVAIL_DATE, "", "");
+
+  // if (available_dates) {
+  //   console.log(new Date(available_dates?.data[0]["partioned_name"]));
+  // }
 
   const [selectedDateRange] = useState([
     new Date("2018-08-04"),
@@ -61,31 +45,23 @@ const BackTest = () => {
   };
 
   const { data } = useFetch(params, BACKTEST_URL, update_param, updateInterval);
-  console.log(data);
-  const { available_dates } = useFetch(
-    "",
-    BACKTEST_AVAIL_DATE,
-    update_param,
-    updateInterval
-  );
-  // const markedRanges = getMarkedRanges(available_dates);
-  // console.log(markedRanges)
 
   return (
     <>
       <Grid justify="center">
         <Grid.Col>
-          <DatePicker onSubmit={handleSubmit} BackTest={true} />
-          <TimePicker onTimeChange={handleTimeChange} />
-          <p>
-            Selected time: {selectedTime && selectedTime.toLocaleTimeString()}
-          </p>
+          <BTDatePicker onSubmit={handleSubmit} BackTest={true} />
           <TimeSlider onTimeChange={handleTimeChange2} />
           <p>Selected time: {currentTime}</p>
         </Grid.Col>
       </Grid>
 
       <Grid>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT_Theo data={data} greek={"gamma"} />
+          </Card>
+        </Grid.Col>
         <Grid.Col sm={12} md={6}>
           <Card bg="transparent">
             <EChartBT data={data} greek={"gamma"} />

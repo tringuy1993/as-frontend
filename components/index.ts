@@ -3,6 +3,7 @@ export { default as MainShell } from "./Shell/MainShell";
 export { default as SelectGreek } from "./selections/SelectGreek";
 export { default as SelectTicker } from "./selections/SelectTicker";
 export { default as DatePicker } from "./datepicker/DatePicker";
+export { default as BTDatePicker } from "./datepicker/BTDatePicker";
 export { default as TimePicker } from "./timepicker/TimePicker";
 export { default as TimeSlider } from "./timepicker/TimeSlider";
 
