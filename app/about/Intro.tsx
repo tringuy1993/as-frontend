@@ -27,7 +27,7 @@ export const Intro: React.FC = () => {
             Full-Stack Developer
           </Title>
           <Space h="xl" />
-          <Title size="35px">Hi, I'm Tri Nguyen.</Title>
+          <Title size="35px">Hi, I&apos;m Tri Nguyen.</Title>
           <Space h="lg" />
           <Text size="25px" style={{ textAlign: "justify" }}>
             I am a passionate, self-taught, full-stack developer who goes the

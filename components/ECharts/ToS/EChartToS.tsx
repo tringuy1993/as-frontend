@@ -14,7 +14,7 @@ export default function EChartToS({ symbol, data, theoData, greek }) {
         theoData[i].index = i;
       }
     }
-    ecOptions = EChartToS_Opts(symbol, nonzero_data, theoData, greek);
+    ecOptions = EChartToS_Opts(symbol, nonzero_data, theoData);
     ecVoloptions = EChart_Opts_VolOI(symbol, modified_data);
   }
 

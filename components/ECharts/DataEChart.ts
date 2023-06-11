@@ -1,5 +1,29 @@
-export function combineESOptionData(data, greek) {
-  let combined_data;
+type ESOptionData = {
+  openinterest: number;
+  optiontype: string;
+  strike: number;
+  ticker_last_price: number;
+  volume: number;
+  [key: string]: number; // Index signature for dynamic properties
+};
+
+type ESOptionResult = {
+  strike_price: number;
+  exp_date_str?: string;
+  c_totalvolume: number;
+  c_openinterest: number;
+  c_notion_expo: number;
+  p_totalvolume: number;
+  p_openinterest: number;
+  p_notion_expo: number;
+  total_notional_exposure: number;
+};
+
+export function combineESOptionData(
+  data: ESOptionData[],
+  greek: string
+): ESOptionResult[] {
+  let combined_data: ESOptionResult[];
   if (data.some((obj) => "exp_date" in obj)) {
     const call_data = data
       .filter((data) => data.optiontype === "c")
@@ -28,8 +52,8 @@ export function combineESOptionData(data, greek) {
       );
       if (matching_put_data) {
         acc.push({
-          strike_price: curr.strike,
-          exp_date_str: curr.exp_date_str,
+          strike_price: curr?.strike,
+          exp_date_str: curr?.exp_date_str,
           c_totalvolume: curr.c_totalvolume,
           c_openinterest: curr.c_openinterest,
           c_notion_expo: curr.c_notion_expo,
@@ -81,7 +105,6 @@ export function combineESOptionData(data, greek) {
       return acc;
     }, []);
   }
-
   return combined_data;
 }
 
@@ -91,13 +114,8 @@ export const GetAllModifiedToSData = (data, greek) => {
     exp_date_str: data.exp_date_str,
     last_price: data.last_price,
     open_price: data.open_price,
-
     c_totalvolume: data.c_totalvolume,
-    // call_oi: data.call_oi,
-
     p_totalvolume: -1 * data.p_totalvolume,
-    // put_oi: data.put_open,
-
     total_notional_exposure: data[greek + "_total_notional_exposure"],
     c_notion_expo: data["c_" + greek + "_notion_expo"],
     p_notion_expo: data["p_" + greek + "_notion_expo"],

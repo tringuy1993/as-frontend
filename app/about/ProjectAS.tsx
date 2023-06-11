@@ -37,7 +37,7 @@ export const ProjectAS: React.FC = () => {
         labelPosition="center"
       />
       <Grid grow>
-        <Grid.Col sm={1} md={2} lg={5} className={classes.grid}>
+        <Grid.Col sm={1} md={5} lg={7} className={classes.grid}>
           <Text
             style={{
               textAlign: "justify",
@@ -94,7 +94,7 @@ export const ProjectAS: React.FC = () => {
         </Grid.Col>
         <Grid.Col
           sm={1}
-          md={2}
+          md={1}
           lg={5}
           style={{
             margin: "auto",

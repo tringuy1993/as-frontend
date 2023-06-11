@@ -7,6 +7,7 @@ import useFetch from "@/app/api/useFetch";
 import EChartTime from "@/components/ECharts/Time/EChartTime";
 import { modify_time_data } from "@/components/ECharts/UtilECharts";
 import { combineESOptionData } from "@/components/ECharts/DataEChart";
+import { Box } from "@mantine/core";
 
 export default function GreekTime() {
   //Select Date
@@ -58,15 +59,11 @@ export default function GreekTime() {
   }
 
   return (
-    <main className="">
+    <Box style={{ textAlign: "center" }}>
       <DatePicker dateRange={selectedDateRange} onSubmit={handleSubmit} />
       <SelectGreek value={selectedGreek} onChange={handleGreekChange} />
       <SelectTicker value={selectTicker} onChange={handleTickerChange} />
-      <EChartTime
-        symbol={selectTicker}
-        data={modified_data}
-        greek={selectedGreek}
-      />
-    </main>
+      <EChartTime data={modified_data} />
+    </Box>
   );
 }

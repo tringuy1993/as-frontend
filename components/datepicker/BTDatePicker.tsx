@@ -39,7 +39,7 @@ export default function BTDatePicker({
       <Group align={"center"} justify={"center"} className={classes.group}>
         <DatePickerInput
           type="range"
-          value={date_start}
+          // value={date_start}
           className={classes.input}
           placeholder="Pick Expiration Date"
           firstDayOfWeek="sunday"

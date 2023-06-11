@@ -14,11 +14,15 @@ export function getNextFriday2(date = new Date()) {
   }
 }
 
-export function formatDate(dateobj) {
+export function formatDate(dateobj: Date): string {
   return format(dateobj, "yyyy-MM-dd");
 }
 
-export function req_params(symbol, selectedGreek, finalDate) {
+export function req_params(
+  symbol: string[] | string,
+  selectedGreek: string,
+  finalDate
+) {
   symbol = typeof symbol === "object" ? JSON.stringify(symbol) : symbol;
 
   return {

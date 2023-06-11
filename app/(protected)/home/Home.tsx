@@ -5,18 +5,22 @@ import { useState } from "react";
 import { GetModifiedToSTheoData } from "@/components/ECharts/DataEChart";
 import { getNextFriday2, req_params } from "../utilitiesProtected";
 import { EChartES, DatePicker, SelectGreek, EChartToS } from "@/components";
-import { privatefetchData } from "@/lib/api";
+import { Box } from "@mantine/core";
+
+interface DateRange {
+  dateRange: Array<Date>;
+}
 
 export default function Home() {
   //Select Date
   const [selectedDateRange] = useState([new Date(), getNextFriday2()]);
   const [finalDate, setFinalDate] = useState(selectedDateRange);
-  const handleSubmit = (selectedDateRange) => {
+  const handleSubmit = (selectedDateRange: DateRange): void => {
     setFinalDate(() => selectedDateRange.dateRange);
   };
   //Select Greek
-  const [selectedGreek, setSelectedGreek] = useState("gamma");
-  function handleGreekChange(event) {
+  const [selectedGreek, setSelectedGreek] = useState<string>("gamma");
+  function handleGreekChange(event: string): void {
     setSelectedGreek(event);
   }
 
@@ -43,10 +47,6 @@ export default function Home() {
     updateInterval
   );
 
-  // const test = privatefetchData(GREEK_EXPO_URL, params2);
-  // test.then((result) => {
-  //   // console.log(result);
-  // });
   const params3 = req_params("$SPX.X", "gamma", finalDate);
   const { data: ToSTheoData } = useFetch(
     params3,
@@ -56,7 +56,7 @@ export default function Home() {
   );
 
   const ToSTheoData_SPX = ToSTheoData?.map((data) =>
-    GetModifiedToSTheoData(data, selectedGreek)
+    GetModifiedToSTheoData(data)
   );
 
   let EChartToSList;
@@ -93,11 +93,11 @@ export default function Home() {
   }
 
   return (
-    <>
+    <Box style={{ textAlign: "center", margin: "auto" }}>
       <DatePicker dateRange={selectedDateRange} onSubmit={handleSubmit} />
       <SelectGreek value={selectedGreek} onChange={handleGreekChange} />
       <EChartES symbol={"ES"} data={ESData} greek={selectedGreek} />
       {EChartToSList}
-    </>
+    </Box>
   );
 }

@@ -31,16 +31,15 @@ function DatePicker({ dateRange, onSubmit, BackTest }) {
 
   return (
     <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-      <Group align={"center"} justify={"center"} className={classes.group}>
+      <Group align={"center"} className={classes.group}>
         <DatePickerInput
           type="range"
           className={classes.input}
           placeholder="Pick Expiration Date"
-          firstDayOfWeek="sunday"
+          firstDayOfWeek={0}
           clearable={false}
           excludeDate={BackTest ? null : disableDatesBeforeThisWeek}
           allowSingleDateInRange
-          value={dateRange}
           {...form.getInputProps("dateRange")}
         ></DatePickerInput>
         <Button type="submit"> Submit Date </Button>

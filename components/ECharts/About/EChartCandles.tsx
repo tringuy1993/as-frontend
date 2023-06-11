@@ -144,7 +144,7 @@ const EchartCandles: React.FC<EchartCandlesProps> = ({ symbol }) => {
       {Object.keys(chartOptions).length && (
         <EChartThemed
           option={chartOptions}
-          style={{ width: "inherit", height: "65vh" }}
+          style={{ width: "100%", height: "65vh" }}
         />
       )}
     </>

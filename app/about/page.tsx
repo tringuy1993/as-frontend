@@ -13,7 +13,7 @@ const About = () => {
   const { classes } = useStyles();
 
   return (
-    <MediaQuery smallerThan="lg" styles={{ marginLeft: 0, marginRight: 0 }}>
+    <MediaQuery smallerThan="md" styles={{ marginLeft: 0, marginRight: 0 }}>
       <Container sx={classes.root}>
         <Intro />
         <DevJourney />
