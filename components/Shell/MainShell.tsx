@@ -8,7 +8,7 @@ export default function MainShell({ children }) {
   const { classes, theme } = useStyles();
   return (
     <AppShell
-      className={classes.body}
+      className={(classes.body, classes.theme)}
       header={<HeaderMenu />}
       footer={<Footer />}
     >

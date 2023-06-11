@@ -3,6 +3,7 @@
 import { CacheProvider } from "@emotion/react";
 import { useEmotionCache, MantineProvider } from "@mantine/core";
 import { useServerInsertedHTML } from "next/navigation";
+import ThemeProvider from "@/theme/ThemeProvider";
 
 export default function RootStyleRegistry({ children }) {
   const cache = useEmotionCache();
@@ -19,9 +20,10 @@ export default function RootStyleRegistry({ children }) {
 
   return (
     <CacheProvider value={cache}>
-      <MantineProvider withGlobalStyles withNormalizeCSS>
-        {children}
-      </MantineProvider>
+      {/* <MantineProvider withGlobalStyles withNormalizeCSS> */}
+      <ThemeProvider>{children}</ThemeProvider>
+
+      {/* </MantineProvider> */}
     </CacheProvider>
   );
 }

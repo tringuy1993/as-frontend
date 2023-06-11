@@ -33,7 +33,6 @@ export const ProjectAS: React.FC = () => {
         my="xl"
         size="xl"
         variant="dashed"
-        color="black"
         label={<Title size="30">Project: Alpha-Seekers</Title>}
         labelPosition="center"
       />
@@ -100,6 +99,7 @@ export const ProjectAS: React.FC = () => {
           style={{
             margin: "auto",
           }}
+          bg="transparent"
         >
           <form onSubmit={handleSubmitSymbol}>
             <TextInput

@@ -10,7 +10,6 @@ export const DevJourney: React.FC = () => {
         my="xl"
         size="xl"
         variant="dashed"
-        color="black"
         label={<Title size="30">My Dev Journey</Title>}
         labelPosition="center"
       />

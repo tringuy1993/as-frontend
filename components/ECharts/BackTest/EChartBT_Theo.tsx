@@ -1,5 +1,5 @@
-import ReactEcharts from "echarts-for-react";
 import { ECOpts_BT, ECOpts_Theo_BT } from "./EChartBT_Opts";
+import { EChartThemed } from "../EChartThemed";
 
 const EChartBT_Theo = ({ data, greek }) => {
   let ecOptions;
@@ -9,17 +9,7 @@ const EChartBT_Theo = ({ data, greek }) => {
     ecOptions = ECOpts_Theo_BT(data?.greek_theo, greek);
     console.log(ecOptions);
   }
-  return (
-    <>
-      {
-        <ReactEcharts
-          option={{ ...ecOptions }}
-          style={{ height: "650px" }}
-          //   theme={theme}
-        />
-      }
-    </>
-  );
+  return <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />;
 };
 
 export default EChartBT_Theo;

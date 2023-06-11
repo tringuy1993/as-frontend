@@ -1,13 +1,14 @@
-import EChartsReact from "echarts-for-react";
 import { useEffect, useState } from "react";
-
 import { createMarkLine, formatNumbers } from "../UtilECharts";
-// import { YF_URL } from "../../constants";
 import { YF_URL } from "@/app/api/apiURLs";
-// import { useAxiosPrivate } from "../../hooks";
 import useAxiosPrivate from "@/app/api/useAxiosPrivate";
+import { EChartThemed } from "../EChartThemed";
+import { EChartsOption } from "echarts-for-react";
 
-const EchartCandles = ({ symbol }) => {
+type EchartCandlesProps = {
+  symbol: string;
+};
+const EchartCandles: React.FC<EchartCandlesProps> = ({ symbol }) => {
   const [chartOptions, setChartOptions] = useState([]);
 
   const params = {
@@ -15,22 +16,13 @@ const EchartCandles = ({ symbol }) => {
   };
 
   const axiosPrivate = useAxiosPrivate();
-
   const fetchData = async () => {
     try {
-      // let response = await fetchApiData(YF_URL);
       let response = await axiosPrivate.get(YF_URL, { params: params });
-
       let modifiedData = response?.data;
-      // modifiedData["column_names"] =
-      //   modifiedData["column_names"].unshift("date");
-      // modifiedData.data = formatList(modifiedData.data);
-      // console.log(["date", ...modifiedData["column_names"]]);
-
       const Close = modifiedData.data[modifiedData.data.length - 1][1];
-
       const markValue2 = { index: Close, price_name: Close };
-      const test = createMarkLine(
+      const markLine = createMarkLine(
         false,
         "none",
         "y",
@@ -44,16 +36,14 @@ const EchartCandles = ({ symbol }) => {
       if (symbol === "^GSPC") {
         symbol = "SPX";
       }
-      const option = {
+      const option: EChartsOption = {
         title: [
           {
             text: `${symbol}`,
             left: "center",
-
-            textStyle: { fontSize: 30, color: "black" },
+            textStyle: { fontSize: 30 },
           },
         ],
-        // grid: [{ left: 20, right: 30, bottom: 30 }],
         grid: [{ left: 20 }],
         dataset: {
           source: modifiedData["data"],
@@ -61,20 +51,17 @@ const EchartCandles = ({ symbol }) => {
         series: {
           type: "candlestick",
           dimensions: ["Date", ...modifiedData["column_names"]],
-          ...test, // MarkValue
+          ...markLine,
         },
         tooltip: {
           trigger: "axis",
-          //   axisPointer: {
-          //     type: "cross",
-          //   },
           backgroundColor: "transparent",
           hideDelay: 1500,
           confine: true,
           axisPointer: {
             type: "cross",
           },
-          valueFormatter: function (value) {
+          valueFormatter: function (value: string) {
             return formatNumbers(value);
           },
           position: function (pos, params, el, elRect, size) {
@@ -95,10 +82,8 @@ const EchartCandles = ({ symbol }) => {
             min: "dataMin",
             max: "dataMax",
             axisLabel: {
-              color: "black",
               frontWeight: "bold",
-              fontColor: "black",
-              formatter: function (value, index) {
+              formatter: function (value: string) {
                 var date = new Date(value);
                 return date.toISOString().substring(0, 10);
               },
@@ -111,7 +96,7 @@ const EchartCandles = ({ symbol }) => {
             z: 0,
             axisLabel: {
               frontWeight: "bold",
-              color: "black",
+              // color: "black",
             },
             position: "right",
           },
@@ -157,7 +142,7 @@ const EchartCandles = ({ symbol }) => {
     <>
       {" "}
       {Object.keys(chartOptions).length && (
-        <EChartsReact
+        <EChartThemed
           option={chartOptions}
           style={{ width: "inherit", height: "65vh" }}
         />

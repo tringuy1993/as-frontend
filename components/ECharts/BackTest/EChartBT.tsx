@@ -1,5 +1,5 @@
-import ReactEcharts from "echarts-for-react";
 import { ECOpts_BT } from "./EChartBT_Opts";
+import { EChartThemed } from "../EChartThemed";
 
 const EChartBT = ({ data, greek }) => {
   let ecOptions;
@@ -8,13 +8,7 @@ const EChartBT = ({ data, greek }) => {
   }
   return (
     <>
-      {
-        <ReactEcharts
-          option={{ ...ecOptions }}
-          style={{ height: "650px" }}
-          //   theme={theme}
-        />
-      }
+      <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />
     </>
   );
 };

@@ -1,9 +1,8 @@
 import React from "react";
-
 import { EChartTime_Opts } from "./EChartTime_Opts";
-import ReactEcharts from "echarts-for-react";
+import { EChartThemed } from "../EChartThemed";
 
-const EChartTime = ({ data, theme }) => {
+const EChartTime = ({ data }) => {
   let option, chartHeight, chartOptions;
   if (data) {
     option = EChartTime_Opts(data);
@@ -12,12 +11,11 @@ const EChartTime = ({ data, theme }) => {
   }
   return (
     <>
-      <ReactEcharts
+      <EChartThemed
         option={{ ...chartOptions }}
         style={{ height: chartHeight }}
-        theme={theme}
         notMerge={true}
-      ></ReactEcharts>
+      ></EChartThemed>
     </>
   );
 };

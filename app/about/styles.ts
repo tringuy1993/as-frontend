@@ -1,6 +1,11 @@
 import { createStyles, rem } from "@mantine/core";
 
 export const useStyles = createStyles((theme) => ({
+  theme: {
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark : theme.colors.white,
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+  },
   card: {
     height: "450px",
     display: "flex",
@@ -47,12 +52,10 @@ export const useStyles = createStyles((theme) => ({
     maxWidth: "unset",
     marginLeft: "250px",
     marginRight: "250px",
-    // Media query for smaller screen sizes
-    // [`@media (max-width: 550px)`]: {
-    //   maxWidth: 450,
-    //   maxHeight: 250,
-    // },
   },
+  // dividerTheme: {
+  //   borderBottomColor: theme.colorScheme === "dark" ? "white" : "black",
+  // },
 
   grid: {
     display: "flex",

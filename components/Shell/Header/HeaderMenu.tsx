@@ -16,7 +16,7 @@ import { IoLogOut } from "react-icons/io5";
 import { modals } from "@mantine/modals";
 // import { useFBAuth } from "../../login/FBAuthContext";
 // import ThemeToggler from "../theme/ThemeToggle";
-
+import { ThemeToggle } from "@/theme/ThemeToggle";
 import { useStyles } from "./HeaderMenuStyle";
 import { useFBAuth } from "@/app/(auth)/FBAuthContext";
 import ModalComp from "@/components/modal/Modal";
@@ -78,6 +78,7 @@ const HeaderMenu = () => {
   function links() {
     return (
       <>
+        <ThemeToggle />
         {menuItems.map((link) => (
           <a
             href={link.href}

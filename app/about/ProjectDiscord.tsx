@@ -10,11 +10,9 @@ export const ProjectDiscord: React.FC = () => {
   return (
     <>
       <Divider
-        // className={classes.divider}
         my="xl"
         size="xl"
         variant="dashed"
-        color="black"
         label={<Title size="30">Project: ASDiscord</Title>}
         labelPosition="center"
       />
@@ -35,16 +33,8 @@ export const ProjectDiscord: React.FC = () => {
             display charts based on expiration date, ticker and option greeks.
           </Text>
         </Grid.Col>
-        <Grid.Col
-          sm={1}
-          md={2}
-          lg={5}
-          mih={500}
-          //   style={{
-          //     margin: "auto",
-          //   }}
-        >
-          <Card mih={"inherit"}>
+        <Grid.Col sm={1} md={2} lg={5} mih={500}>
+          <Card mih={"inherit"} bg="transparent">
             <Image
               alt="Discord Image"
               src="/static/images/Discord.png"
@@ -57,7 +47,6 @@ export const ProjectDiscord: React.FC = () => {
       <Box style={{ textAlign: "center" }}>
         <br></br>
         <Title order={3} size="25px">
-          {" "}
           Technologies used:
         </Title>
         <Text size="15px">

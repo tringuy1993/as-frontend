@@ -3,8 +3,9 @@ import ReactEcharts from "echarts-for-react";
 import { Grid } from "@mantine/core";
 import { combineESOptionData } from "../DataEChart";
 import { ECOpts_ES_VolOI, EChartES_Opts } from "./EChartES_Opts";
+import { EChartThemed } from "../EChartThemed";
 
-const EChartES = ({ symbol, data, greek, theme }) => {
+const EChartES = ({ symbol, data, greek }) => {
   let ecOptions, ecVoloptions;
   if (data) {
     const modified_data = combineESOptionData(data, greek);
@@ -15,17 +16,12 @@ const EChartES = ({ symbol, data, greek, theme }) => {
   return (
     <Grid>
       <Grid.Col sm={12} md={6}>
-        <ReactEcharts
-          option={{ ...ecOptions }}
-          style={{ height: "650px" }}
-          theme={theme}
-        />
+        <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />
       </Grid.Col>
       <Grid.Col sm={12} md={6}>
-        <ReactEcharts
+        <EChartThemed
           option={{ ...ecVoloptions }}
           style={{ height: "650px" }}
-          theme={theme}
         />
       </Grid.Col>
     </Grid>
