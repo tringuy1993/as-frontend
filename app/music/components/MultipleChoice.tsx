@@ -2,15 +2,15 @@ import React from "react";
 // import { useState } from "react";
 import { Button } from "@mantine/core";
 
-import { useStyles } from "./MusicStyle";
-import CountDownClock from "./components/CountDownClock";
+import { useStyles } from "../styles";
+import CountDownClock from "./CountDownClock";
 
 const MultipleChoice = ({
   options,
   selectedOption,
+  answerYear,
   onChange,
   answer,
-  finalAnswer,
 }) => {
   const { classes } = useStyles();
   const isCorrect = answer === selectedOption;
@@ -48,14 +48,15 @@ const MultipleChoice = ({
                   color: "green",
                 }}
               >
-                Correct! <br /> Song Name: {finalAnswer.song} <br />
-                Artist: {finalAnswer.artist} <br />
-                Year: {finalAnswer.year}
+                Correct! <br /> Song Name: {answer.song} <br />
+                Artist: {answer.artist} <br />
+                Year: {answerYear.year}
               </h1>
             ) : (
               <h1 style={{ color: "red" }}>
-                Incorrect! <br /> Song Name: {finalAnswer.song} <br />
-                Artist: {finalAnswer.artist} <br /> Year: {finalAnswer.year}
+                Incorrect! <br /> Song Name: {answer.song} <br />
+                Artist: {answer.artist} <br />
+                Year: {answerYear.year}
               </h1>
             )}
           </>

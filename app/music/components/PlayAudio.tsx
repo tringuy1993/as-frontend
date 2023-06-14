@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Slider, Card, Text, ActionIcon, Grid } from "@mantine/core";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { useStyles } from "../MusicStyle";
+import { useStyles } from "../styles";
 
 const formatTime = (time) => {
   const minutes = Math.floor(time / 60)
