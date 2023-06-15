@@ -1,10 +1,11 @@
-"use client";
+// "use client";
 import { Inter } from "next/font/google";
-import RootStyleRegistry from "./emotion";
-import { FBAuthProvider } from "./(auth)/FBAuthContext";
-import { MainShell } from "@/components";
-import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
+// import RootStyleRegistry from "./emotion";
+// import { FBAuthProvider } from "./(auth)/FBAuthContext";
+// import { MainShell } from "@/components";
+// import { ModalsProvider } from "@mantine/modals";
+// import { Notifications } from "@mantine/notifications";
+import AllProviders from "./AllProviders";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,15 +18,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <FBAuthProvider>
-          <RootStyleRegistry>
-            <ModalsProvider>
-              <Notifications position="top-center" />
-              <MainShell>{children}</MainShell>
-            </ModalsProvider>
-          </RootStyleRegistry>
-        </FBAuthProvider>
+        <AllProviders>{children}</AllProviders>
       </body>
     </html>
   );
 }
+
+// export default function RootLayout({ children }) {
+//   return (
+//     <html lang="en">
+//       <body className={inter.className}>
+//         <FBAuthProvider>
+//           <RootStyleRegistry>
+//             <ModalsProvider>
+//               <Notifications position="top-center" />
+//               <MainShell>{children}</MainShell>
+//             </ModalsProvider>
+//           </RootStyleRegistry>
+//         </FBAuthProvider>
+//       </body>
+//     </html>
+//   );
+// }

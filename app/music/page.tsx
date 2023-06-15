@@ -4,7 +4,6 @@ import { buttonUrls } from "./api/MusicData";
 import { useStyles } from "./styles";
 
 import { Card, Group, Button } from "@mantine/core";
-import Link from "next/link";
 import GenreView2 from "./[genre]/GenreView";
 
 const Music = () => {

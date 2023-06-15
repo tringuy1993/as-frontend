@@ -13,20 +13,17 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
-import { modals } from "@mantine/modals";
-// import { useFBAuth } from "../../login/FBAuthContext";
-// import ThemeToggler from "../theme/ThemeToggle";
 import { ThemeToggle } from "@/theme/ThemeToggle";
 import { useStyles } from "./HeaderMenuStyle";
 import { useFBAuth } from "@/app/(auth)/FBAuthContext";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
+import Link from "next/link";
 
 const logInMenu = (user, logoutUser, menuType) => {
   if (menuType === "Main") {
     return (
       <>
-        {" "}
         {user ? (
           <ActionIcon onClick={logoutUser}>
             <IoLogOut className="icon" />
@@ -61,10 +58,10 @@ const logInMenu = (user, logoutUser, menuType) => {
 };
 
 const menuItems = [
-  { href: "/home", text: "Home" },
-  { href: "/greektime", text: "Time" },
-  { href: "/backtest", text: "Back Test" },
-  { href: "/about", text: "About" },
+  { href: "/home", text: "Home", prefetch: false },
+  { href: "/greektime", text: "Time", prefetch: false },
+  { href: "/backtest", text: "Back Test", prefetch: false },
+  { href: "/about", text: "About", prefetch: true },
 ];
 
 const HeaderMenu = () => {
@@ -80,13 +77,14 @@ const HeaderMenu = () => {
       <>
         <ThemeToggle />
         {menuItems.map((link) => (
-          <a
+          <Link
             href={link.href}
             className={classes.link}
+            prefetch={link.prefetch}
             key={`${link.href}+${link.text}`}
           >
             {link.text}
-          </a>
+          </Link>
         ))}
         <Button onClick={open} variant="white">
           Contact
@@ -95,9 +93,9 @@ const HeaderMenu = () => {
           <Contact />
         </ModalComp>
 
-        <a href="/music" className={classes.link}>
+        <Link href="/music" className={classes.link}>
           Music
-        </a>
+        </Link>
         {/* <ThemeToggler></ThemeToggler> */}
       </>
     );

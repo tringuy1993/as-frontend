@@ -45,6 +45,7 @@ export default function Signin() {
             required
             mt="md"
           />
+          {errMsg}
           <Group position="apart" mt="lg">
             <Checkbox label="Remember me" sx={{ lineHeight: 1 }} />
             <Anchor
@@ -55,6 +56,7 @@ export default function Signin() {
               Forgot password?
             </Anchor>
           </Group>
+
           <Button fullWidth mt="xl" type="submit">
             Sign in
           </Button>

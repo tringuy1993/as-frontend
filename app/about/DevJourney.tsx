@@ -64,7 +64,7 @@ export const DevJourney: React.FC = () => {
           </ol>
           <Title size="25px">
             Click for my resume:
-            <a href="/about/TN-Resume.pdf">Resume</a>
+            <a href="/static/pdf/TN-Resume-2023-Final.pdf">Resume</a>
           </Title>
         </Text>
       </Box>

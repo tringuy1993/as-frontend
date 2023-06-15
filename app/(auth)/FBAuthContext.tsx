@@ -29,7 +29,15 @@ export const FBAuthProvider = ({ children }) => {
     await signInWithEmailAndPassword(auth, e.email, e.password)
       .then(() => router.replace("/home"))
       .catch((error) => {
-        setErrMsg(error.code);
+        console.log(error);
+        if (
+          error.code === "auth/user-not-found" ||
+          error.code === "auth/wrong-password"
+        ) {
+          setErrMsg("Incorrect User or Password");
+        } else {
+          setErrMsg(error.code);
+        }
       });
   }
 
@@ -45,7 +53,9 @@ export const FBAuthProvider = ({ children }) => {
       if (currentUser) {
         const token = await currentUser?.getIdToken();
         setCookie(idToken, token);
-        setUser(currentUser);
+        setUser(() => {
+          return currentUser;
+        });
       } else {
         () => {
           // eslint-disable-next-line react-hooks/exhaustive-deps
