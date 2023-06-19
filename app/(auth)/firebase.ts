@@ -42,6 +42,7 @@ export const mapFirebaseResponseToTenant = async (
 
 export const logout = async (auth: Auth): Promise<void> => {
   const { signOut } = await import("firebase/auth");
+  await fetch("/api/logout");
   return signOut(auth);
 };
 

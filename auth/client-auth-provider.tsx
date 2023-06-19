@@ -8,6 +8,8 @@ import { useFirebaseAuth } from "./firebase";
 import { clientConfig } from "../config/client-config";
 import { Tenant } from "./types";
 import { AuthContext } from "./context";
+import { loginWithProvider } from "@/app/(auth)/firebase";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const mapFirebaseResponseToTenant = (
   result: IdTokenResult,
@@ -52,31 +54,37 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
   const firstLoadRef = React.useRef(true);
   const [tenant, setTenant] = React.useState(defaultTenant);
+  const [hasLogged, setHasLogged] = React.useState(false);
+  const router = useRouter();
+  const params = useSearchParams();
+
+  // Call logout any time
+  const handleLogout = async () => {
+    const auth = await getFirebaseAuth();
+    const { signOut } = await import("firebase/auth");
+    await signOut(auth);
+    // Removes authentication cookies
+    await fetch("/api/logout", {
+      method: "GET",
+    });
+  };
+
+  const handleLogin = async (e) => {
+    const auth = await getFirebaseAuth();
+
+    const redirect = params?.get("redirect");
+    await loginWithProvider(auth, e.email, e.password)
+      .then(() => router.push(redirect ?? "/home"))
+      .catch((error) => {
+        // setErrMsg(error.code);
+      });
+  };
 
   const handleIdTokenChanged = async (firebaseUser: FirebaseUser | null) => {
     if (firebaseUser && tenant && firebaseUser.uid === tenant.id) {
       firstLoadRef.current = false;
       return;
     }
-
-    const auth = await getFirebaseAuth();
-
-    // if (!firebaseUser && firstLoadRef.current) {
-    //   const { signInAnonymously } = await import("firebase/auth");
-    //   firstLoadRef.current = false;
-    //   const credential = await signInAnonymously(auth);
-    //   await fetch("/api/login", {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: `Bearer ${
-    //         (
-    //           await credential.user.getIdTokenResult()
-    //         ).token
-    //       }`,
-    //     },
-    //   });
-    //   return;
-    // }
 
     if (!firebaseUser) {
       firstLoadRef.current = false;
@@ -88,8 +96,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
 
     firstLoadRef.current = false;
     const tokenResult = await firebaseUser.getIdTokenResult();
-
-    await fetch("/api/signin", {
+    await fetch("/api/login", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${tokenResult.token}`,
@@ -108,19 +115,20 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
 
   React.useEffect(() => {
     const unsubscribePromise = registerChangeListener();
-
+    setHasLogged(true);
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
-  }, []);
+  }, [handleLogout, handleLogin]);
+  const context = {
+    tenant: tenant,
+    loginUser: handleLogin,
+    logoutUser: handleLogout,
+  };
 
   return (
-    <AuthContext.Provider
-      value={{
-        tenant,
-      }}
-    >
-      {children}
+    <AuthContext.Provider value={context}>
+      {hasLogged && children}
     </AuthContext.Provider>
   );
 };

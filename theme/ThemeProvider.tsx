@@ -9,7 +9,7 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 function ThemeProvider({ children }) {
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
-    defaultValue: "dark",
+    defaultValue: "light",
     getInitialValueInEffect: true,
   });
 

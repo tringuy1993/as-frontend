@@ -2,20 +2,21 @@
 import React from "react";
 
 import { useRouter } from "next/navigation";
-import { useFBAuth } from "../(auth)/FBAuthContext";
+// import { useFBAuth } from "../(auth)/FBAuthContext";
 import { useAuth } from "@/auth/hooks";
 
 export default function Layout({ children }) {
-  const user = useAuth();
+  const { tenant } = useAuth();
   const router = useRouter();
+  console.log("AuthLayout:", tenant);
 
   React.useEffect(() => {
-    if (user == null) {
-      // router.replace("/signin");
+    if (tenant === null) {
+      router.push("/signin");
       console.log("can't singin");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [tenant?.idToken]);
 
   return <>{children}</>;
 }

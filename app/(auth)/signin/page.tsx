@@ -12,39 +12,23 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/auth/hooks";
-import { useFirebaseAuth } from "@/auth/firebase";
-import { clientConfig } from "@/config/client-config";
-import { loginWithProvider } from "../firebase";
 
 export default function Signin() {
-  // const { loginUser, errMsg } = useFBAuth();
-  const form = useForm({ initialValues: { email: "", password: "" } });
-  const router = useRouter();
-
-  const params = useSearchParams();
   const [hasLogged, setHasLogged] = useState(false);
-  const { tenant } = useAuth();
-  const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
+  const form = useForm({ initialValues: { email: "", password: "" } });
+  const { loginUser } = useAuth();
+  // const router = useRouter();
 
-  const loginUser = async (e) => {
-    // const { signInWithEmailAndPassword } = await import("firebase/auth");
-    setHasLogged(false);
-    const auth = await getFirebaseAuth();
-    // const result = await signInWithEmailAndPassword(auth, e.email, e.password);
-    const tenant = await loginWithProvider(auth, e.email, e.password);
-    console.log(tenant.idToken);
-    await fetch("/api/login", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${tenant.idToken}`,
-      },
-    });
-    setHasLogged(true);
-    const redirect = params?.get("redirect");
-    router.push(redirect ?? "/home");
-  };
+  // const params = useSearchParams();
+  // const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
+
+  // const loginUser = async (e) => {
+  //   const auth = await getFirebaseAuth();
+  //   const tenant = await loginWithProvider(auth, e.email, e.password);
+  //   const redirect = params?.get("redirect");
+  //   router.push(redirect ?? "/home");
+  // };
 
   return (
     <Container size={420} my={150}>
