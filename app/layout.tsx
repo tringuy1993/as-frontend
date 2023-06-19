@@ -1,11 +1,8 @@
 // "use client";
 import { Inter } from "next/font/google";
-// import RootStyleRegistry from "./emotion";
-// import { FBAuthProvider } from "./(auth)/FBAuthContext";
-// import { MainShell } from "@/components";
-// import { ModalsProvider } from "@mantine/modals";
-// import { Notifications } from "@mantine/notifications";
+
 import AllProviders from "./AllProviders";
+import { ServerAuthProvider } from "@/auth/server-auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +15,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AllProviders>{children}</AllProviders>
+        <ServerAuthProvider>
+          <AllProviders>{children}</AllProviders>
+        </ServerAuthProvider>
       </body>
     </html>
   );

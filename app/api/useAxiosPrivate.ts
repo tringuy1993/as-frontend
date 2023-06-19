@@ -1,14 +1,17 @@
 import { useFBAuth } from "../(auth)/FBAuthContext";
 import { useEffect } from "react";
 import { axiosPrivate } from "./axios";
+import { useAuth } from "@/auth/hooks";
 
 const useAxiosPrivate = () => {
   const { user, logoutUser, refreshIdToken } = useFBAuth();
+  const { tenant } = useAuth();
+
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${user?.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${tenant?.idToken}`;
         }
         return config;
       },
