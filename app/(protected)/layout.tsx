@@ -2,18 +2,23 @@
 import React from "react";
 
 import { useRouter } from "next/navigation";
-import { useFBAuth } from "../(auth)/FBAuthContext";
+import { useAuth } from "@/auth/hooks";
 
-export default function Layout({ children }) {
-  const { user } = useFBAuth();
+type ChildrenProps = {
+  children: React.ReactNode;
+};
+export default function Layout({ children }: ChildrenProps) {
+  const { tenant } = useAuth();
   const router = useRouter();
 
   React.useEffect(() => {
-    if (user == null) {
-      router.replace("/signin");
+    if (tenant === null) {
+      console.log(tenant === null);
+      router.push("/signin");
+      console.log("No Authentication");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [tenant?.idToken]);
 
   return <>{children}</>;
 }

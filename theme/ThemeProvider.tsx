@@ -1,15 +1,10 @@
-import {
-  MantineProvider,
-  ColorSchemeProvider,
-  ButtonStylesParams,
-  DividerStylesParams,
-} from "@mantine/core";
+import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 function ThemeProvider({ children }) {
   const [colorScheme, setColorScheme] = useLocalStorage({
     key: "mantine-color-scheme",
-    defaultValue: "dark",
+    defaultValue: "light",
     getInitialValueInEffect: true,
   });
 

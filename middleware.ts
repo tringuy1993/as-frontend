@@ -1,54 +1,72 @@
-import { NextRequest, NextResponse } from "next/server";
-const PUBLIC_FILE = /\.(.*)$/;
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import {
+  authentication,
+  refreshAuthCookies,
+} from "next-firebase-auth-edge/lib/next/middleware";
+import { authConfig } from "./config/server-config";
 
-const idToken = process.env.NEXT_PUBLIC_COOKIE_NAME;
-export default async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  // Redirecting / to /home
+function redirectToLogin(request: NextRequest) {
+  if (
+    request.nextUrl.pathname === "/signin" ||
+    request.nextUrl.pathname === "/music" ||
+    request.nextUrl.pathname === "/about"
+  ) {
+    return NextResponse.next();
+  }
+  const url = request.nextUrl.clone();
+  url.pathname = "/signin";
+  url.search = `redirect=${request.nextUrl.pathname}${url.search}`;
+  return NextResponse.redirect(url);
+}
+
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://www.alpha-seekers.com"]
+    : ["http://localhost:3000"];
+
+export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   if (url.pathname === "/") {
     url.pathname = "/home";
     return NextResponse.redirect(url);
   }
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/static") ||
-    pathname.startsWith("/signin") ||
-    pathname.startsWith("/register") ||
-    PUBLIC_FILE.test(pathname)
-  ) {
-    return NextResponse.next();
-  }
-  if (
-    request.nextUrl.pathname.startsWith("/home") ||
-    request.nextUrl.pathname.startsWith("/greektime") ||
-    request.nextUrl.pathname.startsWith("/backtest") ||
-    request.nextUrl.pathname.startsWith("/signin")
-  ) {
-    const authCookie = request.cookies.get(idToken);
-    const params = new URLSearchParams({
-      token: authCookie?.value ?? "",
+  const origin = request.headers.get("Origin");
+  if (origin && !allowedOrigins.includes(origin)) {
+    return new NextResponse(null, {
+      status: 400,
+      statusText: "Bad Request",
+      headers: {
+        "Content-Type": "text/plain",
+      },
     });
-    if (!authCookie) {
-      return NextResponse.rewrite(new URL("/signin", request.url));
-    }
-
-    try {
-      const res = await fetch(
-        `http://localhost:3000/api/verifyId?` + params.toString()
-      );
-      const json = await res.json();
-      const validToken = json.validToken;
-      console.log("MiddleWare:", validToken);
-
-      if (validToken == false) {
-        return NextResponse.rewrite(new URL("/signin", request.url));
-      } else {
-        return NextResponse.next();
-      }
-    } catch (e) {
-      console.log(e);
-    }
   }
+  if (
+    //Check if logged in to move forward
+    // request.nextUrl.pathname.startsWith("/home") ||
+    // request.nextUrl.pathname.startsWith("/greektime") ||
+    // request.nextUrl.pathname.startsWith("/backtest") ||
+    // request.nextUrl.pathname.startsWith("/signin")
+    url.pathname === "/home" ||
+    url.pathname === "/greektime" ||
+    url.pathname === "/backtest" ||
+    url.pathname === "/signin"
+  ) {
+    url.searchParams.set("redirect", url.pathname);
+  }
+
+  return authentication(request, {
+    ...authConfig,
+    handleValidToken: async ({ token, decodedToken }) => {
+      return NextResponse.next();
+    },
+    handleError: async (error) => {
+      console.error("Unhandled authentication error", { error });
+      return redirectToLogin(request);
+    },
+  });
 }
+
+export const config = {
+  matcher: ["/", "/((?!_next/static|favicon.ico|logo.svg).*)"],
+};

@@ -1,5 +1,7 @@
+import { AuthenticationOptions } from "next-firebase-auth-edge/lib/next/middleware";
+
 export const serverConfig = {
-  useSecureCookies: "false",
+  useSecureCookies: false,
   firebaseApiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   serviceAccount: {
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
@@ -9,4 +11,20 @@ export const serverConfig = {
       "\n"
     ),
   },
+};
+
+export const authConfig: AuthenticationOptions = {
+  loginPath: "/api/login",
+  logoutPath: "/api/logout",
+  apiKey: serverConfig.firebaseApiKey,
+  cookieName: "AuthToken",
+  cookieSignatureKeys: ["secret1", "secret2"],
+  cookieSerializeOptions: {
+    path: "/",
+    httpOnly: true,
+    secure: serverConfig.useSecureCookies, // Set this to true on HTTPS environments
+    sameSite: "lax" as const,
+    maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
+  },
+  serviceAccount: serverConfig.serviceAccount,
 };

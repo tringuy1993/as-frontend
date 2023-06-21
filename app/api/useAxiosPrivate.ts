@@ -1,14 +1,16 @@
-import { useFBAuth } from "../(auth)/FBAuthContext";
 import { useEffect } from "react";
 import { axiosPrivate } from "./axios";
+import { useAuth } from "@/auth/hooks";
 
 const useAxiosPrivate = () => {
-  const { user, logoutUser, refreshIdToken } = useFBAuth();
+  // const { user, logoutUser, refreshIdToken } = useFBAuth();
+  const { tenant } = useAuth();
+
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${user?.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${tenant?.idToken}`;
         }
         return config;
       },
@@ -21,11 +23,11 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          const newAccessToken = await refreshIdToken();
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          // const newAccessToken = await refreshIdToken();
+          // prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         } else if (error?.response?.status > 405) {
-          logoutUser();
+          // logoutUser();
         }
         return Promise.reject(error);
       }
@@ -36,7 +38,7 @@ const useAxiosPrivate = () => {
       axiosPrivate.interceptors.response.eject(responseIntercept);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, refreshIdToken]);
+  }, [tenant?.idToken]);
 
   return axiosPrivate;
 };

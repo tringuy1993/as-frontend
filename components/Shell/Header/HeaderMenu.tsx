@@ -15,10 +15,17 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
 import { ThemeToggle } from "@/theme/ThemeToggle";
 import { useStyles } from "./HeaderMenuStyle";
-import { useFBAuth } from "@/app/(auth)/FBAuthContext";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
 import Link from "next/link";
+import { useAuth } from "@/auth/hooks";
+
+const menuItems = [
+  { href: "/home", text: "Home", prefetch: false },
+  { href: "/greektime", text: "Time", prefetch: false },
+  { href: "/backtest", text: "Back Test", prefetch: false },
+  { href: "/about", text: "About", prefetch: true },
+];
 
 const logInMenu = (user, logoutUser, menuType) => {
   if (menuType === "Main") {
@@ -38,7 +45,6 @@ const logInMenu = (user, logoutUser, menuType) => {
   } else {
     return (
       <>
-        {" "}
         {user ? (
           <Button onClick={logoutUser} leftIcon={<IoLogOut className="icon" />}>
             <span>Log Out</span>
@@ -57,20 +63,12 @@ const logInMenu = (user, logoutUser, menuType) => {
   }
 };
 
-const menuItems = [
-  { href: "/home", text: "Home", prefetch: false },
-  { href: "/greektime", text: "Time", prefetch: false },
-  { href: "/backtest", text: "Back Test", prefetch: false },
-  { href: "/about", text: "About", prefetch: true },
-];
-
 const HeaderMenu = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [opened, { open, close }] = useDisclosure(false);
-
   const { classes, theme } = useStyles();
-  const { user, logoutUser } = useFBAuth();
+  const { tenant, logoutUser } = useAuth();
 
   function links() {
     return (
@@ -96,7 +94,6 @@ const HeaderMenu = () => {
         <Link href="/music" className={classes.link}>
           Music
         </Link>
-        {/* <ThemeToggler></ThemeToggler> */}
       </>
     );
   }
@@ -112,7 +109,7 @@ const HeaderMenu = () => {
           </h1>
           <Group className={classes.hiddenMobile}>
             {links()}
-            {logInMenu(user, logoutUser, "Main")}
+            {logInMenu(tenant, logoutUser, "Main")}
           </Group>
           {/* <Button onClick={openModal}>Open confirm modal</Button>; */}
           <Burger
@@ -143,7 +140,7 @@ const HeaderMenu = () => {
           ></Divider>
 
           <Group position="center" grow pb="xl" px="md">
-            {logInMenu(user, logoutUser, "")}
+            {logInMenu(tenant, logoutUser, "")}
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

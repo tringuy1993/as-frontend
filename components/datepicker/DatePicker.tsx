@@ -3,6 +3,7 @@ import { Button, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { startOfWeek } from "date-fns";
 import { useStyles } from "./DatePickerStyle";
+import { DatePickerProps } from "./types";
 
 function getNextFriday2(date = new Date()) {
   const dateCopy = new Date(date.getTime());
@@ -16,11 +17,11 @@ function getNextFriday2(date = new Date()) {
   return nextFriday;
 }
 
-function disableDatesBeforeThisWeek(date) {
+function disableDatesBeforeThisWeek(date: Date): boolean {
   return date < startOfWeek(new Date(), { weekStartsOn: 0 });
 }
 
-function DatePicker({ dateRange, onSubmit, BackTest }) {
+function DatePicker({ dateRange, onSubmit, BackTest }: DatePickerProps) {
   //Work!
   const { classes } = useStyles();
   const form = useForm({
@@ -38,7 +39,7 @@ function DatePicker({ dateRange, onSubmit, BackTest }) {
           placeholder="Pick Expiration Date"
           firstDayOfWeek={0}
           clearable={false}
-          excludeDate={BackTest ? null : disableDatesBeforeThisWeek}
+          excludeDate={BackTest ? true : disableDatesBeforeThisWeek}
           allowSingleDateInRange
           {...form.getInputProps("dateRange")}
         ></DatePickerInput>
