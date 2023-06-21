@@ -1,7 +1,21 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "./useAxiosPrivate";
 
-export default function useFetch(params, url, updatevalues, updateInterval) {
+export type resultparamsProps = {
+  und_symbol: string[] | string;
+  greek: string;
+  startDate: string;
+  endDate: string;
+};
+
+type updateParamProps = (Date[] | string)[];
+
+export default function useFetch(
+  params: resultparamsProps,
+  url?: string,
+  updatevalues?: updateParamProps,
+  updateInterval?: number
+) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,7 +35,7 @@ export default function useFetch(params, url, updatevalues, updateInterval) {
   useEffect(() => {
     fetchData();
 
-    if (updateInterval > 0) {
+    if (updateInterval && updateInterval > 0) {
       const intervalId = setInterval(fetchData, updateInterval);
       return () => clearInterval(intervalId);
     }

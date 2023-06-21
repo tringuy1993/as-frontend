@@ -20,6 +20,13 @@ import { Contact } from "@/components/contact/Contact";
 import Link from "next/link";
 import { useAuth } from "@/auth/hooks";
 
+const menuItems = [
+  { href: "/home", text: "Home", prefetch: false },
+  { href: "/greektime", text: "Time", prefetch: false },
+  { href: "/backtest", text: "Back Test", prefetch: false },
+  { href: "/about", text: "About", prefetch: true },
+];
+
 const logInMenu = (user, logoutUser, menuType) => {
   if (menuType === "Main") {
     return (
@@ -56,22 +63,12 @@ const logInMenu = (user, logoutUser, menuType) => {
   }
 };
 
-const menuItems = [
-  { href: "/home", text: "Home", prefetch: false },
-  { href: "/greektime", text: "Time", prefetch: false },
-  { href: "/backtest", text: "Back Test", prefetch: false },
-  { href: "/about", text: "About", prefetch: true },
-];
-
 const HeaderMenu = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [opened, { open, close }] = useDisclosure(false);
-
   const { classes, theme } = useStyles();
-
   const { tenant, logoutUser } = useAuth();
-  console.log("Heeader TenantL:", tenant);
 
   function links() {
     return (
@@ -97,7 +94,6 @@ const HeaderMenu = () => {
         <Link href="/music" className={classes.link}>
           Music
         </Link>
-        {/* <ThemeToggler></ThemeToggler> */}
       </>
     );
   }

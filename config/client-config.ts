@@ -8,7 +8,7 @@ const test6 = "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID";
 const test7 = "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID";
 
 export const clientConfig = {
-  redicrectUrl: process.env.NEXT_REPUBLIC_REDIRECT_URL!,
+  // redicrectUrl: process.env.NEXT_REPUBLIC_REDIRECT_URL!,
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   // apiKey: process.env.apiKey,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
@@ -16,8 +16,6 @@ export const clientConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
-  test: "Name",
-  test2: process.env.TEST,
 };
 
 // export const clientConfig = {

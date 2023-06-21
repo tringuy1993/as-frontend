@@ -4,15 +4,16 @@ import { MainShell } from "@/components";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 
-export default function AllProviders({ children }) {
+type ChildrenProps = {
+  children: React.ReactNode;
+};
+export default function AllProviders({ children }: ChildrenProps) {
   return (
-    // <FBAuthProvider>
     <RootStyleRegistry>
       <ModalsProvider>
         <Notifications position="top-center" />
         <MainShell>{children}</MainShell>
       </ModalsProvider>
     </RootStyleRegistry>
-    // </FBAuthProvider>
   );
 }

@@ -40,21 +40,17 @@ export const mapFirebaseResponseToTenant = async (
   };
 };
 
-export const logout = async (auth: Auth): Promise<void> => {
-  const { signOut } = await import("firebase/auth");
-  await fetch("/api/logout");
-  return signOut(auth);
-};
+export interface loginWithProviderProp {
+  auth: Auth;
+  email: string;
+  password: string;
+}
 
-export const loginWithProvider = async (
-  auth: Auth,
+export const loginWithProvider = async ({
+  auth,
   email,
-  password
-  // provider: AuthProvider,
-  // credentialFromError: (error: AuthError) => OAuthCredential | null
-): Promise<Tenant> => {
-  const user = auth.currentUser;
-
+  password,
+}: loginWithProviderProp): Promise<Tenant> => {
   const { signInWithEmailAndPassword } = await import("firebase/auth");
   const result = await signInWithEmailAndPassword(auth, email, password);
   const idTokenResult = await result.user.getIdTokenResult();

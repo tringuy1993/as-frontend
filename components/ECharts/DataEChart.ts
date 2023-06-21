@@ -1,6 +1,6 @@
 type ESOptionData = {
   openinterest: number;
-  optiontype: string;
+  optiontype: string | number;
   strike: number;
   ticker_last_price: number;
   volume: number;
@@ -8,15 +8,21 @@ type ESOptionData = {
 };
 
 type ESOptionResult = {
-  strike_price: number;
-  exp_date_str?: string;
+  strike_price?: number;
+  strike?: number;
+  last_price?: number;
+  open_price?: number;
+  exp_date_str?: string | number;
   c_totalvolume: number;
-  c_openinterest: number;
+  c_openinterest?: number;
   c_notion_expo: number;
   p_totalvolume: number;
-  p_openinterest: number;
+  p_openinterest?: number;
   p_notion_expo: number;
   total_notional_exposure: number;
+
+  // c_openinterest?: number;
+  // p_openinterest?: number;
 };
 
 export function combineESOptionData(
@@ -45,12 +51,13 @@ export function combineESOptionData(
         p_notion_expo: data[greek + "_notion_expo"],
       }));
 
-    combined_data = call_data.reduce((acc, curr) => {
+    combined_data = call_data.reduce((acc: ESOptionResult[], curr) => {
       const matching_put_data = put_data.find(
         (data) =>
           data.strike === curr.strike && data.exp_date_str === curr.exp_date_str
       );
       if (matching_put_data) {
+        // console.log(acc);
         acc.push({
           strike_price: curr?.strike,
           exp_date_str: curr?.exp_date_str,
@@ -85,7 +92,7 @@ export function combineESOptionData(
         p_notion_expo: data[greek + "_notion_expo"],
       }));
 
-    combined_data = call_data.reduce((acc, curr) => {
+    combined_data = call_data.reduce((acc: ESOptionResult[], curr) => {
       const matching_put_data = put_data.find(
         (data) => data.strike === curr.strike
       );
@@ -108,7 +115,7 @@ export function combineESOptionData(
   return combined_data;
 }
 
-export const GetAllModifiedToSData = (data, greek) => {
+export const GetAllModifiedToSData = (data, greek: string): ESOptionResult => {
   return {
     strike_price: data.strike_price,
     exp_date_str: data.exp_date_str,
@@ -122,7 +129,7 @@ export const GetAllModifiedToSData = (data, greek) => {
   };
 };
 
-export const GetModifiedToSData = (data, greek) => {
+export const GetModifiedToSData = (data, greek: string): ESOptionResult => {
   return {
     strike_price: data.strike_price,
     last_price: data.last_price,
@@ -140,7 +147,13 @@ export const GetModifiedToSData = (data, greek) => {
   };
 };
 
-export const GetModifiedToSTheoData = (data) => {
+export type TheoDataProps = {
+  strike_price?: number;
+  spot_price?: number;
+  total_gamma: number;
+  // index: number;
+};
+export const GetModifiedToSTheoData = (data: TheoDataProps): TheoDataProps => {
   return {
     strike_price: data.spot_price,
     total_gamma: data.total_gamma,

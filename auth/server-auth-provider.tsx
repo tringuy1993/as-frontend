@@ -29,11 +29,11 @@ const mapTokensToTenant = ({ token, decodedToken }: Tokens): Tenant => {
   };
 };
 
-export async function ServerAuthProvider({
-  children,
-}: {
+type ChildrenProps = {
   children: React.ReactNode;
-}) {
+};
+
+export async function ServerAuthProvider({ children }: ChildrenProps) {
   const tokens = await getTokens(cookies(), {
     serviceAccount: serverConfig.serviceAccount,
     apiKey: serverConfig.firebaseApiKey,

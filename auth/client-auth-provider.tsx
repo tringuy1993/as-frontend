@@ -8,8 +8,11 @@ import { useFirebaseAuth } from "./firebase";
 import { clientConfig } from "../config/client-config";
 import { Tenant } from "./types";
 import { AuthContext } from "./context";
-import { loginWithProvider } from "@/app/(auth)/firebase";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  loginWithProvider,
+  loginWithProviderProp,
+} from "@/app/(auth)/firebase";
+import { useRouter } from "next/navigation";
 
 const mapFirebaseResponseToTenant = (
   result: IdTokenResult,
@@ -54,9 +57,8 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
   const firstLoadRef = React.useRef(true);
   const [tenant, setTenant] = React.useState(defaultTenant);
-  const [hasLogged, setHasLogged] = React.useState(false);
   const router = useRouter();
-  const params = useSearchParams();
+  const [loading, setLoading] = React.useState(false);
 
   // Call logout any time
   const handleLogout = async () => {
@@ -66,19 +68,32 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     // Removes authentication cookies
     await fetch("/api/logout", {
       method: "GET",
+      // mode: "same-origin",
     });
+
+    router.push("/signin");
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: loginWithProviderProp) => {
+    setLoading(true);
     const auth = await getFirebaseAuth();
-
-    const redirect = params?.get("redirect");
-    await loginWithProvider(auth, e.email, e.password)
-      .then(() => router.push(redirect ?? "/home"))
-      .catch((error) => {
-        // setErrMsg(error.code);
-      });
+    await loginWithProvider({
+      auth: auth,
+      email: e.email,
+      password: e.password,
+    })
+      .then(() => {
+        router.push("/home");
+      })
+      .catch((error) => {});
+    setLoading(false);
   };
+
+  // const handleLogin = React.useCallback(async (e) => {
+  //   const auth = await getFirebaseAuth();
+  //   await loginWithProvider(auth, e.email, e.password);
+  //   router.push("/home");
+  // }, []);
 
   const handleIdTokenChanged = async (firebaseUser: FirebaseUser | null) => {
     if (firebaseUser && tenant && firebaseUser.uid === tenant.id) {
@@ -101,6 +116,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
       headers: {
         Authorization: `Bearer ${tokenResult.token}`,
       },
+      mode: "same-origin",
     });
     startTransition(() => {
       setTenant(mapFirebaseResponseToTenant(tokenResult, firebaseUser));
@@ -115,11 +131,10 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
 
   React.useEffect(() => {
     const unsubscribePromise = registerChangeListener();
-    setHasLogged(true);
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
-  }, [handleLogout, handleLogin]);
+  }, [tenant?.idToken, handleLogin, handleLogout]);
   const context = {
     tenant: tenant,
     loginUser: handleLogin,
@@ -128,7 +143,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
 
   return (
     <AuthContext.Provider value={context}>
-      {hasLogged && children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

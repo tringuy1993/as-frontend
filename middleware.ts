@@ -5,10 +5,13 @@ import {
   refreshAuthCookies,
 } from "next-firebase-auth-edge/lib/next/middleware";
 import { authConfig } from "./config/server-config";
-import { getFirebaseAuth } from "next-firebase-auth-edge/lib/auth";
 
 function redirectToLogin(request: NextRequest) {
-  if (request.nextUrl.pathname === "/signin" || "/music" || "/about") {
+  if (
+    request.nextUrl.pathname === "/signin" ||
+    request.nextUrl.pathname === "/music" ||
+    request.nextUrl.pathname === "/about"
+  ) {
     return NextResponse.next();
   }
   const url = request.nextUrl.clone();
@@ -17,24 +20,45 @@ function redirectToLogin(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://www.alpha-seekers.com"]
+    : ["http://localhost:3000"];
+
 export async function middleware(request: NextRequest) {
-  console.log("Middleware??");
-  if (
-    request.nextUrl.pathname.startsWith("/home") ||
-    request.nextUrl.pathname.startsWith("/greektime") ||
-    request.nextUrl.pathname.startsWith("/backtest") ||
-    request.nextUrl.pathname.startsWith("/signin")
-  ) {
-    console.log("AuthPath In Middleware");
+  const url = request.nextUrl.clone();
+  if (url.pathname === "/") {
+    url.pathname = "/home";
+    return NextResponse.redirect(url);
   }
+  const origin = request.headers.get("Origin");
+  if (origin && !allowedOrigins.includes(origin)) {
+    return new NextResponse(null, {
+      status: 400,
+      statusText: "Bad Request",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
+  }
+  if (
+    //Check if logged in to move forward
+    // request.nextUrl.pathname.startsWith("/home") ||
+    // request.nextUrl.pathname.startsWith("/greektime") ||
+    // request.nextUrl.pathname.startsWith("/backtest") ||
+    // request.nextUrl.pathname.startsWith("/signin")
+    url.pathname === "/home" ||
+    url.pathname === "/greektime" ||
+    url.pathname === "/backtest" ||
+    url.pathname === "/signin"
+  ) {
+    url.searchParams.set("redirect", url.pathname);
+  }
+
   return authentication(request, {
     ...authConfig,
     handleValidToken: async ({ token, decodedToken }) => {
-      console.log("Valid Token", token);
       return NextResponse.next();
-    },
-    handleInvalidToken: async () => {
-      return redirectToLogin(request);
     },
     handleError: async (error) => {
       console.error("Unhandled authentication error", { error });
