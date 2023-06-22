@@ -14,8 +14,7 @@ export const useStyles = createStyles((theme) => ({
   },
 
   title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    fontWeight: 700,
+    textAlign: "center",
   },
 
   buttons_root: {

@@ -1,65 +1,85 @@
 import { createStyles, rem } from "@mantine/core";
 
-export const useStyles = createStyles((theme) => ({
-  wrapper: {
-    minHeight: 400,
-    boxSizing: "border-box",
-    backgroundImage: `linear-gradient(-60deg, ${
-      theme.colors[theme.primaryColor][4]
-    } 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
-    borderRadius: theme.radius.md,
-    padding: `calc(${theme.spacing.xl} * 2.5)`,
+const getBackgroundColor = (theme) => {
+  return theme.colorScheme === "dark" ? theme.black : theme.white;
+};
+const getTextColor = (theme) => {
+  return theme.colorScheme === "dark" ? theme.white : theme.black;
+};
 
-    [theme.fn.smallerThan("sm")]: {
-      padding: `calc(${theme.spacing.xl} * 1.5)`,
+export const useStyles = createStyles((theme) => {
+  const backgroundColor = getBackgroundColor(theme);
+  const textColor = getTextColor(theme);
+  return {
+    wrapper: {
+      minHeight: 400,
+      boxSizing: "border-box",
+      backgroundColor: backgroundColor,
+      borderRadius: theme.radius.md,
+      color: textColor,
+      padding: `calc(${theme.spacing.xl} * 2.5)`,
+
+      [theme.fn.smallerThan("sm")]: {
+        padding: `calc(${theme.spacing.xl} * 1.5)`,
+      },
     },
-  },
 
-  title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    color: theme.white,
-    lineHeight: 1,
-  },
-
-  description: {
-    color: theme.colors[theme.primaryColor][0],
-    maxWidth: rem(300),
-
-    [theme.fn.smallerThan("sm")]: {
-      maxWidth: "100%",
+    title: {
+      fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+      color: textColor,
+      lineHeight: 2,
     },
-  },
 
-  form: {
-    backgroundColor: theme.white,
-    padding: theme.spacing.xl,
-    borderRadius: theme.radius.md,
-    boxShadow: theme.shadows.lg,
-  },
-
-  social: {
-    color: theme.white,
-
-    "&:hover": {
-      color: theme.colors[theme.primaryColor][1],
+    description: {
+      color: textColor,
+      maxWidth: rem(300),
+      [theme.fn.smallerThan("sm")]: {
+        maxWidth: "100%",
+      },
     },
-  },
 
-  input: {
-    backgroundColor: theme.white,
-    borderColor: theme.colors.gray[4],
-    color: theme.black,
-
-    "&::placeholder": {
-      color: theme.colors.gray[5],
+    form: {
+      padding: theme.spacing.xl,
+      borderRadius: theme.radius.md,
+      boxShadow: theme.shadows.lg,
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.gray[9]
+          : theme.colors.gray[2],
     },
-  },
 
-  inputLabel: {
-    color: theme.black,
-  },
+    fields: {
+      color: textColor,
+    },
 
-  control: {
-    backgroundColor: theme.colors[theme.primaryColor][6],
-  },
-}));
+    social: {
+      color: theme.white,
+
+      "&:hover": {
+        color: theme.colors[theme.primaryColor][1],
+      },
+    },
+
+    input: {
+      backgroundColor: theme.white,
+      borderColor: theme.colors.gray[4],
+      color: theme.black,
+
+      "&::placeholder": {
+        color: theme.colors.gray[5],
+      },
+    },
+
+    inputLabel: {
+      color: theme.black,
+    },
+
+    control: {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.gray[7]
+          : theme.colors.gray[2],
+      color: textColor,
+    },
+  };
+});

@@ -8,9 +8,10 @@ import {
   Drawer,
   ScrollArea,
   ActionIcon,
+  rem,
 } from "@mantine/core";
 
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useHeadroom } from "@mantine/hooks";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoLogOut } from "react-icons/io5";
 import { ThemeToggle } from "@/theme/ThemeToggle";
@@ -70,6 +71,8 @@ const HeaderMenu = () => {
   const { classes, theme } = useStyles();
   const { tenant, logoutUser } = useAuth();
 
+  const pinned = useHeadroom({ fixedAt: 110 });
+
   function links() {
     return (
       <>
@@ -100,7 +103,11 @@ const HeaderMenu = () => {
 
   return (
     <>
-      <Header className={classes.header} height="">
+      <Header
+        className={classes.header}
+        sx={{ transform: `translate3d(0, ${pinned ? 0 : rem(-110)},0)` }}
+        height=""
+      >
         <Group position="apart" sx={{ height: "100%" }}>
           <h1>
             <a href="/home" className={classes.brand} key="title">

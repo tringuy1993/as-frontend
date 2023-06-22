@@ -18,7 +18,7 @@ const useStyles = createStyles((theme, { variant }: ContactIconStyles) => ({
   wrapper: {
     display: "flex",
     alignItems: "center",
-    color: theme.white,
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
   },
 
   icon: {
@@ -33,14 +33,14 @@ const useStyles = createStyles((theme, { variant }: ContactIconStyles) => ({
   },
 
   title: {
-    color:
-      variant === "gradient"
-        ? theme.colors.gray[6]
-        : theme.colors[theme.primaryColor][0],
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    // variant === "gradient"
+    //   ? theme.colors.gray[6]
+    //   : theme.colors[theme.primaryColor][0],
   },
 
   description: {
-    color: variant === "gradient" ? theme.black : theme.white,
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
   },
 }));
 

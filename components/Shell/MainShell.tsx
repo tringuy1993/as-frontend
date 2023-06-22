@@ -4,7 +4,7 @@ import HeaderMenu from "./Header/HeaderMenu";
 import { useStyles } from "./MainShellStyle";
 import Footer from "./Footer/Footer";
 
-export default function MainShell({ children }) {
+export default function MainShell({ children }: { children: React.ReactNode }) {
   const { classes, theme } = useStyles();
   return (
     <AppShell

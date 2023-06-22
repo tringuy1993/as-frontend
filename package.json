@@ -30,6 +30,7 @@
     "echarts-for-react": "^3.0.2",
     "embla-carousel-autoplay": "^8.0.0-rc07",
     "embla-carousel-react": "^7.0.0",
+    "encoding": "^0.1.13",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "firebase": "^9.21.0",

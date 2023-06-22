@@ -61,7 +61,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   const [loading, setLoading] = React.useState(false);
 
   // Call logout any time
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     const auth = await getFirebaseAuth();
     const { signOut } = await import("firebase/auth");
     await signOut(auth);
@@ -74,7 +74,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     router.push("/signin");
   };
 
-  const handleLogin = async (e: loginWithProviderProp) => {
+  const handleLogin = async (e: loginWithProviderProp): Promise<void> => {
     setLoading(true);
     const auth = await getFirebaseAuth();
     await loginWithProvider({
@@ -86,6 +86,8 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
         router.push("/home");
       })
       .catch((error) => {});
+
+    router.refresh();
     setLoading(false);
   };
 

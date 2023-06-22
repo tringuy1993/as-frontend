@@ -13,9 +13,7 @@ export default function Layout({ children }: ChildrenProps) {
 
   React.useEffect(() => {
     if (tenant === null) {
-      console.log(tenant === null);
       router.push("/signin");
-      console.log("No Authentication");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tenant?.idToken]);

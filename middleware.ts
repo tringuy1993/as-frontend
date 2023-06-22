@@ -1,9 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import {
-  authentication,
-  refreshAuthCookies,
-} from "next-firebase-auth-edge/lib/next/middleware";
+import { authentication } from "next-firebase-auth-edge/lib/next/middleware";
 import { authConfig } from "./config/server-config";
 
 function redirectToLogin(request: NextRequest) {
@@ -22,7 +19,7 @@ function redirectToLogin(request: NextRequest) {
 
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? ["https://www.alpha-seekers.com"]
+    ? ["https://www.alpha-seekers.com", "/https://alpha-seekers.com"]
     : ["http://localhost:3000"];
 
 export async function middleware(request: NextRequest) {
@@ -52,7 +49,6 @@ export async function middleware(request: NextRequest) {
     url.pathname === "/backtest" ||
     url.pathname === "/signin"
   ) {
-    url.searchParams.set("redirect", url.pathname);
   }
 
   return authentication(request, {

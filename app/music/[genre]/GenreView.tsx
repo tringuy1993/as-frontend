@@ -123,7 +123,7 @@ const GenreView2 = ({ params }: { params: { genre: string } }) => {
       <Card withBorder radius="md" className={classes.card}>
         <Group position="center">{buttons}</Group>
       </Card>
-      {/* {`${Object.keys(selectedSong)} ${loadedAudio}`} */}
+      <br></br>
       <Box pos="relative">
         {/* <LoadingOverlay
               visible={loadedAudio}

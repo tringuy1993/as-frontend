@@ -3,17 +3,16 @@ import React, { useState } from "react";
 import { buttonUrls } from "./api/MusicData";
 import { useStyles } from "./styles";
 
-import { Card, Group, Button } from "@mantine/core";
+import { Card, Group, Button, Text } from "@mantine/core";
 import GenreView2 from "./[genre]/GenreView";
-
+type genreType = {
+  genre: string;
+};
 const Music = () => {
   const { classes } = useStyles();
-  const [genre, setGenre] = useState();
-  console.log(genre);
+  const [genre, setGenre] = useState<genreType>();
   // //https://nextjs.org/docs/pages/api-reference/components/link
-  const handleGenreClick = (genreText) => {
-    // navigate(buttonUrls[buttonIndex]);
-    console.log(genreText);
+  const handleGenreClick = (genreText: string): void => {
     const musicPath = `${genreText.replace("/MusicGame/", "")}`;
     setGenre({ genre: musicPath });
   };
@@ -26,20 +25,6 @@ const Music = () => {
       buttonText = "/MusicGame/HipHop";
     }
     return (
-      // <Link
-      //   href={`/music/${buttonText.replace("/MusicGame/", "")}`}
-      //   key={buttonText}
-      //   passHref
-      //   legacyBehavior
-      // >
-      //   <Button
-      //     key={index}
-      //     disabled={isDisabled}
-      //     className={classes.buttons_root}
-      //   >
-      //     {buttonText.replace("/MusicGame/", "")}
-      //   </Button>
-      // </Link>
       <Button
         key={index}
         disabled={isDisabled}
@@ -50,15 +35,19 @@ const Music = () => {
       </Button>
     );
   });
-  // const params = { params: ge };
 
   return (
     <>
-      <h1>Select Your Type of Music!</h1>
+      <Text className={classes.title}>
+        <h1 className="text-align=center">Select Your Type of Music!</h1>
+        {genre && <h2>{genre.genre} queued up!</h2>}
+      </Text>
+
       <Card withBorder radius="md" className={classes.card}>
         {/* Display All the Type/Genre of music. */}
         <Group position="center">{urlButtons}</Group>
       </Card>
+      <br></br>
       {genre && <GenreView2 params={genre} />}
     </>
   );

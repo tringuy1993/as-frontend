@@ -58,7 +58,7 @@ export function Contact() {
     <Paper shadow="md" radius="lg">
       <div className={classes.wrapper}>
         <div className={classes.contacts}>
-          <Text fz="lg" fw={700} className={classes.title} c="#fff">
+          <Text fz="lg" fw={700} className={classes.title}>
             Contact information
           </Text>
 
