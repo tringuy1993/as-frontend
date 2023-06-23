@@ -13,22 +13,12 @@ import {
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useAuth } from "@/auth/hooks";
+import { useSignIn } from "@/auth/signin";
 
 export default function Signin() {
   const [hasLogged, setHasLogged] = useState(false);
   const form = useForm({ initialValues: { email: "", password: "" } });
   const { loginUser } = useAuth();
-  // const router = useRouter();
-
-  // const params = useSearchParams();
-  // const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
-
-  // const loginUser = async (e) => {
-  //   const auth = await getFirebaseAuth();
-  //   const tenant = await loginWithProvider(auth, e.email, e.password);
-  //   const redirect = params?.get("redirect");
-  //   router.push(redirect ?? "/home");
-  // };
 
   return (
     <Container size={420} my={150}>
@@ -44,7 +34,12 @@ export default function Signin() {
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <h1> TESTING </h1>
-        <form onSubmit={form.onSubmit((values) => loginUser(values))}>
+        <form
+          onSubmit={form.onSubmit((values) => {
+            // signIn(values.email, values.password);
+            return loginUser(values);
+          })}
+        >
           <TextInput
             label="Email"
             type="email"

@@ -43,7 +43,6 @@ export default function Home() {
   const [selectedDateRange] = useState<Date[]>([new Date(), getNextFriday2()]);
   const [finalDate, setFinalDate] = useState<Date[]>(selectedDateRange);
   const handleSubmit = (selectedDateRange: DateRange): void => {
-    console.log(selectedDateRange);
     setFinalDate(selectedDateRange.dateRange);
   };
   //Select Greek

@@ -54,5 +54,12 @@ export const loginWithProvider = async ({
   const { signInWithEmailAndPassword } = await import("firebase/auth");
   const result = await signInWithEmailAndPassword(auth, email, password);
   const idTokenResult = await result.user.getIdTokenResult();
+  await fetch("/api/signin", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${idTokenResult.token}`,
+    },
+    mode: "same-origin",
+  });
   return mapFirebaseResponseToTenant(idTokenResult, result.user!);
 };

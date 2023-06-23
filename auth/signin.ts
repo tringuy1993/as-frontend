@@ -1,14 +1,10 @@
 // import firebase_app from "../config";
 
 import { useEffect, useState } from "react";
-import firebaseClient from "./firebaseClient";
-import {
-  signInWithEmailAndPassword,
-  getAuth,
-  UserCredential,
-} from "firebase/auth";
-
-const auth = getAuth(firebaseClient);
+import { UserCredential } from "firebase/auth";
+import { loginWithProvider } from "@/app/(auth)/firebase";
+import { useFirebaseAuth } from "./firebase";
+import { clientConfig } from "@/config/client-config";
 
 type SignInResult = {
   result?: UserCredential;
@@ -23,34 +19,26 @@ enum SignInStatus {
 }
 
 export const useSignIn = () => {
+  const { getFirebaseAuth } = useFirebaseAuth(clientConfig);
   const [status, setStatus] = useState<SignInStatus>();
   const [result, setData] = useState<UserCredential>();
   const [error, setError] = useState();
 
-  const signIn = (email: string, password: string): void => {
-    setStatus(SignInStatus.loading);
-    signInWithEmailAndPassword(auth, email, password)
+  const signIn = async (email: string, password: string) => {
+    setStatus(true);
+    const auth = await getFirebaseAuth();
+    loginWithProvider({ auth, email, password })
       .then((res) => {
+        console.log("Success");
         setData(res);
-        setStatus(SignInStatus.success);
+        setStatus(false);
       })
       .catch((error) => {
         setStatus(SignInStatus.error);
         setError(error);
       });
   };
+  console.log(status);
 
   return { signIn, status, result, error };
 };
-
-// const signIn = (email: string, password: string): Promise<SignInResult> => {
-//   return signInWithEmailAndPassword(auth, email, password)
-//     .then((res) => {
-//       return { result: res };
-//     })
-//     .catch((error) => {
-//       return { error };
-//     });
-// };
-
-// export default signIn;

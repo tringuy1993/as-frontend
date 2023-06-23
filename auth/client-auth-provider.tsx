@@ -12,7 +12,8 @@ import {
   loginWithProvider,
   loginWithProviderProp,
 } from "@/app/(auth)/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSignIn } from "./signin";
 
 const mapFirebaseResponseToTenant = (
   result: IdTokenResult,
@@ -68,12 +69,17 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     // Removes authentication cookies
     await fetch("/api/logout", {
       method: "GET",
-      // mode: "same-origin",
+      mode: "same-origin",
     });
 
-    router.push("/signin");
+    router.refresh();
   };
 
+  // const { signIn, status } = useSignIn();
+  // const handleLogin = (e) => {
+  //   signIn(e.email, e.password);
+  //   router.push("/home");
+  // };
   const handleLogin = async (e: loginWithProviderProp): Promise<void> => {
     setLoading(true);
     const auth = await getFirebaseAuth();
@@ -83,19 +89,20 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
       password: e.password,
     })
       .then(() => {
+        const params = useSearchParams();
+        setLoading(false);
         router.push("/home");
+        // router.refresh();
       })
       .catch((error) => {});
 
-    router.refresh();
+    router.push("/home");
     setLoading(false);
+    // console.log(searchParams?.get("redirect"));
+    // router.push("/home");
+    router.push("/home");
+    // router.refresh();
   };
-
-  // const handleLogin = React.useCallback(async (e) => {
-  //   const auth = await getFirebaseAuth();
-  //   await loginWithProvider(auth, e.email, e.password);
-  //   router.push("/home");
-  // }, []);
 
   const handleIdTokenChanged = async (firebaseUser: FirebaseUser | null) => {
     if (firebaseUser && tenant && firebaseUser.uid === tenant.id) {
@@ -112,14 +119,9 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     }
 
     firstLoadRef.current = false;
+
     const tokenResult = await firebaseUser.getIdTokenResult();
-    await fetch("/api/login", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${tokenResult.token}`,
-      },
-      mode: "same-origin",
-    });
+
     startTransition(() => {
       setTenant(mapFirebaseResponseToTenant(tokenResult, firebaseUser));
     });
@@ -136,7 +138,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
-  }, [tenant?.idToken, handleLogin, handleLogout]);
+  }, [tenant?.idToken, handleLogout, handleLogin]);
   const context = {
     tenant: tenant,
     loginUser: handleLogin,
@@ -144,8 +146,6 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   };
 
   return (
-    <AuthContext.Provider value={context}>
-      {!loading && children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
   );
 };
