@@ -6,7 +6,7 @@ import {
   THEOVANNA_URL,
 } from "@/app/api/apiURLs";
 import useFetch from "@/app/api/useFetch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GetModifiedToSTheoData,
   TheoDataProps,
@@ -109,47 +109,28 @@ export default function Home() {
     ? selectedGreek
     : "vanna";
 
-  const symbols = ["SPY", "$SPX.X", "$NDX.X"];
-  const tosVannaTheoComponents = symbols.map((symbol) => {
-    const theoVannaParams = req_params(symbol, theoGreek, finalDate);
-    const { data: tosVannaTheoData } = useFetch(
-      theoVannaParams,
-      THEOVANNA_URL,
-      update_param,
-      0
-    );
+  const theoSPYVannaParams = req_params("SPY", theoGreek, finalDate);
+  const { data: ToSSPYVannaTheoData } = useFetch(
+    theoSPYVannaParams,
+    THEOVANNA_URL,
+    update_param,
+    0
+  );
 
-    return (
-      <EChartToS_Theo
-        key={symbol}
-        symbol={symbol}
-        data={tosVannaTheoData}
-        greek={theoGreek}
-      />
-    );
-  });
-  // const theoSPYVannaParams = req_params("SPY", theoGreek, finalDate);
-  // const { data: ToSSPYVannaTheoData } = useFetch(
-  //   theoSPYVannaParams,
-  //   THEOVANNA_URL,
-  //   update_param,
-  //   0
-  // );
-
-  // const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
-  // const { data: ToSSPXVannaTheoData } = useFetch(
-  //   theoSPXVannaParams,
-  //   THEOVANNA_URL,
-  //   update_param,
-  //   0
-  // );
-  // const theoQQQVannaParams = req_params("QQQ", theoGreek, finalDate);
-  // const { data: ToSQQQVannaTheoData } = useFetch(
-  //   theoQQQVannaParams,
-  //   THEOVANNA_URL,
-  //   update_param,
-  //   0
-  // );
+  const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
+  const { data: ToSSPXVannaTheoData } = useFetch(
+    theoSPXVannaParams,
+    THEOVANNA_URL,
+    update_param,
+    0
+  );
+  const theoNDXVannaParams = req_params("$NDX.X", theoGreek, finalDate);
+  const { data: ToSNDXVannaTheoData } = useFetch(
+    theoNDXVannaParams,
+    THEOVANNA_URL,
+    update_param,
+    0
+  );
 
   return (
     <Box style={{ textAlign: "center", margin: "auto" }}>
@@ -170,7 +151,25 @@ export default function Home() {
           ))}
         </>
       )}
-      {greekControl == "Theo" && <>{tosVannaTheoComponents}</>}
+      {greekControl == "Theo" && (
+        <>
+          <EChartToS_Theo
+            symbol={"$SPX.X"}
+            data={ToSSPXVannaTheoData}
+            greek={theoGreek}
+          />
+          <EChartToS_Theo
+            symbol={"SPY"}
+            data={ToSSPYVannaTheoData}
+            greek={theoGreek}
+          />
+          <EChartToS_Theo
+            symbol={"$NDX.X"}
+            data={ToSNDXVannaTheoData}
+            greek={theoGreek}
+          />
+        </>
+      )}
     </Box>
   );
 }

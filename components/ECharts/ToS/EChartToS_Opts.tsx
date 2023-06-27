@@ -185,7 +185,7 @@ export function EChartToS_Theo_Opts(symbol, chartData, greek) {
     dimensions: SGdimensions,
     source: chartData,
   };
-  const legends = ["$Call", "$Put"];
+  const legends = ["TheoVanna", "$Put"];
   const colors = ["#e01f54", "#0098d9"];
   // Creating Series that an array of length 4 (put, call, totalgamma, theogamma)
 
@@ -197,6 +197,15 @@ export function EChartToS_Theo_Opts(symbol, chartData, greek) {
       barGap: "-100%",
       itemStyle: { color: colors[0] },
       name: legends[0],
+      // markPoint: {
+      //   data: [
+      //     {
+      //       // xAxis: 300,
+      //       // x: 430,
+      //     },
+      //     { coord: [5000, 50000000] },
+      //   ],
+      // },
     },
   ];
 
