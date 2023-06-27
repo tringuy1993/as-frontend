@@ -4,6 +4,7 @@ export const BASE_URL = process.env.NEXT_PUBLIC_BASE_API!;
 export const GAMMA_URL = process.env.NEXT_PUBLIC_GAMMA_URL!;
 export const GREEK_EXPO_URL = process.env.NEXT_PUBLIC_GREEK_EXPO_URL!;
 export const THEO_URL = process.env.NEXT_PUBLIC_THEO_URL!;
+export const THEOVANNA_URL = process.env.NEXT_PUBLIC_THEOVANNA_URL!;
 export const ALL_URL = process.env.NEXT_PUBLIC_ALL_URL!;
 export const LIVE_URL = process.env.NEXT_PUBLIC_LIVE_URL!;
 export const ES_URL = process.env.NEXT_PUBLIC_ES_URL!;

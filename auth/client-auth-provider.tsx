@@ -98,10 +98,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
 
     router.push("/home");
     setLoading(false);
-    // console.log(searchParams?.get("redirect"));
-    // router.push("/home");
     router.push("/home");
-    // router.refresh();
   };
 
   const handleIdTokenChanged = async (firebaseUser: FirebaseUser | null) => {
@@ -133,16 +130,21 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
     return onIdTokenChanged(auth, handleIdTokenChanged);
   };
 
+  const refreshIdToken = async () => {
+    const auth = await getFirebaseAuth();
+    return auth.currentUser?.getIdToken(true);
+  };
   React.useEffect(() => {
     const unsubscribePromise = registerChangeListener();
     return () => {
       unsubscribePromise.then((unsubscribe) => unsubscribe());
     };
-  }, [tenant?.idToken, handleLogout, handleLogin]);
+  }, [tenant?.idToken, handleLogout, handleLogin, refreshIdToken]);
   const context = {
     tenant: tenant,
     loginUser: handleLogin,
     logoutUser: handleLogout,
+    refreshIdToken: refreshIdToken,
   };
 
   return (

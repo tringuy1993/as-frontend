@@ -67,14 +67,18 @@ const BackTest = () => {
             <EChartBT data={data} greek={"gamma"} />
           </Card>
         </Grid.Col>
-
         <Grid.Col sm={12} md={6}>
           <Card bg="transparent">
             <EChartBT data={data} greek={"vanna"} />
           </Card>
         </Grid.Col>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT data={data} greek={"delta"} />
+          </Card>
+        </Grid.Col>
       </Grid>
-      <Grid>
+      {/* <Grid>
         <Grid.Col sm={12} md={6}>
           <Card bg="transparent">
             <EChartBT data={data} greek={"theta"} />
@@ -86,7 +90,7 @@ const BackTest = () => {
             <EChartBT data={data} greek={"vanna"} />
           </Card>
         </Grid.Col>
-      </Grid>
+      </Grid> */}
     </>
   );
 };

@@ -4,7 +4,7 @@ import { useAuth } from "@/auth/hooks";
 
 const useAxiosPrivate = () => {
   // const { user, logoutUser, refreshIdToken } = useFBAuth();
-  const { tenant } = useAuth();
+  const { tenant, refreshIdToken } = useAuth();
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -23,8 +23,9 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          // const newAccessToken = await refreshIdToken();
-          // prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          const newAccessToken = await refreshIdToken();
+          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          console.log("Renewed Token");
           return axiosPrivate(prevRequest);
         } else if (error?.response?.status > 405) {
           // logoutUser();

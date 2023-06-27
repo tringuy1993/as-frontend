@@ -1,5 +1,10 @@
 "use client";
-import { ES_URL, GREEK_EXPO_URL, THEO_URL } from "@/app/api/apiURLs";
+import {
+  ES_URL,
+  GREEK_EXPO_URL,
+  THEO_URL,
+  THEOVANNA_URL,
+} from "@/app/api/apiURLs";
 import useFetch from "@/app/api/useFetch";
 import { useState } from "react";
 import {
@@ -7,9 +12,17 @@ import {
   TheoDataProps,
 } from "@/components/ECharts/DataEChart";
 import { getNextFriday2, req_params } from "../utilitiesProtected";
-import { EChartES, DatePicker, SelectGreek, EChartToS } from "@/components";
+import {
+  EChartES,
+  DatePicker,
+  SelectGreek,
+  EChartToS,
+  GreekControl,
+  EChartToS_Theo,
+} from "@/components";
 import { Box } from "@mantine/core";
 import { DateRange } from "@/components/datepicker/types";
+import { useLocalStorage } from "@mantine/hooks";
 
 // Get Chart Data List
 function getChartDataList(
@@ -51,6 +64,10 @@ export default function Home() {
     setSelectedGreek(event);
   }
 
+  const [greekControl] = useLocalStorage({ key: "greek-control" });
+
+  // const greekControl = !value ? "NonTheo" : value;
+  // console.log(greekControl);
   const update_param = [finalDate, selectedGreek];
   //Request Parameters
   //Request ES Data
@@ -82,26 +99,78 @@ export default function Home() {
     updateInterval
   );
 
-  const ToSTheoData_SPX: TheoDataProps =
-    ToSTheoData?.map((data: TheoDataProps) => GetModifiedToSTheoData(data)) ??
-    [];
+  const ToSTheoData_SPX: TheoDataProps = ToSTheoData?.map(
+    (data: TheoDataProps) => GetModifiedToSTheoData(data)
+  );
 
   const chartDataList = getChartDataList(ToSData?.data, ToSTheoData_SPX);
+
+  const theoGreek = ["vanna", "gamma"].includes(selectedGreek)
+    ? selectedGreek
+    : "vanna";
+
+  const symbols = ["SPY", "$SPX.X", "$NDX.X"];
+  const tosVannaTheoComponents = symbols.map((symbol) => {
+    const theoVannaParams = req_params(symbol, theoGreek, finalDate);
+    const { data: tosVannaTheoData } = useFetch(
+      theoVannaParams,
+      THEOVANNA_URL,
+      update_param,
+      0
+    );
+
+    return (
+      <EChartToS_Theo
+        key={symbol}
+        symbol={symbol}
+        data={tosVannaTheoData}
+        greek={theoGreek}
+      />
+    );
+  });
+  // const theoSPYVannaParams = req_params("SPY", theoGreek, finalDate);
+  // const { data: ToSSPYVannaTheoData } = useFetch(
+  //   theoSPYVannaParams,
+  //   THEOVANNA_URL,
+  //   update_param,
+  //   0
+  // );
+
+  // const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
+  // const { data: ToSSPXVannaTheoData } = useFetch(
+  //   theoSPXVannaParams,
+  //   THEOVANNA_URL,
+  //   update_param,
+  //   0
+  // );
+  // const theoQQQVannaParams = req_params("QQQ", theoGreek, finalDate);
+  // const { data: ToSQQQVannaTheoData } = useFetch(
+  //   theoQQQVannaParams,
+  //   THEOVANNA_URL,
+  //   update_param,
+  //   0
+  // );
 
   return (
     <Box style={{ textAlign: "center", margin: "auto" }}>
       <DatePicker dateRange={selectedDateRange} onSubmit={handleSubmit} />
       <SelectGreek value={selectedGreek} onChange={handleGreekChange} />
-      <EChartES symbol={"ES"} data={ESData} greek={selectedGreek} />
-      {chartDataList.map(({ symbol, data, theoData }) => (
-        <EChartToS
-          key={symbol}
-          symbol={symbol}
-          data={data}
-          theoData={theoData}
-          greek={selectedGreek}
-        />
-      ))}
+      <GreekControl />
+      {greekControl == "NonTheo" && (
+        <>
+          <EChartES symbol={"ES"} data={ESData} greek={selectedGreek} />
+          {chartDataList.map(({ symbol, data, theoData }) => (
+            <EChartToS
+              key={symbol}
+              symbol={symbol}
+              data={data}
+              theoData={theoData}
+              greek={selectedGreek}
+            />
+          ))}
+        </>
+      )}
+      {greekControl == "Theo" && <>{tosVannaTheoComponents}</>}
     </Box>
   );
 }

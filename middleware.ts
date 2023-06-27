@@ -70,34 +70,13 @@ export async function middleware(request: NextRequest) {
       handleValidToken: async ({ token, decodedToken }) => {
         const url = request.nextUrl.clone();
         console.log("ValidToken Path", url.pathname);
-
         return NextResponse.rewrite(new URL(url.pathname, request.url));
-        return NextResponse.next();
       },
       handleError: async (error) => {
         console.error("Unhandled authentication error", { error });
         return redirectToLogin(request);
       },
     });
-    // return authentication(request, {
-    //   ...authConfig,
-    //   handleValidToken: async ({ token, decodedToken }) => {
-    //     console.log("Valid Token");
-    //     return NextResponse.next();
-    //     // request.nextUrl.pathname = url.pathname;
-    //     // return NextResponse.redirect(request.nextUrl);
-    //   },
-    //   handleInvalidToken: async () => {
-    //     const url = request.nextUrl.clone();
-    //     url.pathname = "/signin";
-    //     url.search = `redirect=${request.nextUrl.pathname}${url.search}`;
-    //     return NextResponse.redirect(url);
-    //   },
-    //   handleError: async (error) => {
-    //     console.error("Unhandled authentication error", { error });
-    //     return redirectToLogin(request);
-    //   },
-    // });
   }
   return NextResponse.next();
 }
