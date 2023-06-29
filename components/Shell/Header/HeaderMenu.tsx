@@ -25,7 +25,6 @@ const menuItems = [
   { href: "/home", text: "Home", prefetch: false },
   { href: "/greektime", text: "Time", prefetch: false },
   { href: "/backtest", text: "Back Test", prefetch: false },
-  { href: "/about", text: "About", prefetch: true },
 ];
 
 const logInMenu = (user, logoutUser, menuType) => {
@@ -77,24 +76,41 @@ const HeaderMenu = () => {
     return (
       <>
         <ThemeToggle />
-        {menuItems.map((link) => (
-          <Link
-            href={link.href}
-            className={classes.link}
-            prefetch={link.prefetch}
-            key={`${link.href}+${link.text}`}
-          >
-            {link.text}
-          </Link>
-        ))}
+        {tenant && (
+          <>
+            {menuItems.map((link) => (
+              <Link
+                href={link.href}
+                className={classes.link}
+                prefetch={link.prefetch}
+                key={`${link.href}+${link.text}`}
+              >
+                {link.text}
+              </Link>
+            ))}
+          </>
+        )}
+
+        <Link
+          href="/about"
+          className={classes.link}
+          prefetch={false}
+          key="/about"
+        >
+          About
+        </Link>
         <Button onClick={open} variant="white">
           Contact
         </Button>
         <ModalComp opened={opened} open={open} close={close}>
           <Contact />
         </ModalComp>
-
-        <Link href="/music" className={classes.link}>
+        <Link
+          href="/music"
+          className={classes.link}
+          prefetch={false}
+          key="/music"
+        >
           Music
         </Link>
       </>

@@ -6,7 +6,7 @@ import {
   THEOVANNA_URL,
 } from "@/app/api/apiURLs";
 import useFetch from "@/app/api/useFetch";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   GetModifiedToSTheoData,
   TheoDataProps,
@@ -55,6 +55,7 @@ export default function Home() {
   //Select Date
   const [selectedDateRange] = useState<Date[]>([new Date(), getNextFriday2()]);
   const [finalDate, setFinalDate] = useState<Date[]>(selectedDateRange);
+
   const handleSubmit = (selectedDateRange: DateRange): void => {
     setFinalDate(selectedDateRange.dateRange);
   };
@@ -66,8 +67,6 @@ export default function Home() {
 
   const [greekControl] = useLocalStorage({ key: "greek-control" });
 
-  // const greekControl = !value ? "NonTheo" : value;
-  // console.log(greekControl);
   const update_param = [finalDate, selectedGreek];
   //Request Parameters
   //Request ES Data
@@ -124,6 +123,14 @@ export default function Home() {
     update_param,
     0
   );
+
+  const theoVIXVannaParams = req_params("$VIX.X", theoGreek, finalDate);
+  const { data: ToSVIXVannaTheoData } = useFetch(
+    theoVIXVannaParams,
+    THEOVANNA_URL,
+    update_param,
+    0
+  );
   const theoNDXVannaParams = req_params("$NDX.X", theoGreek, finalDate);
   const { data: ToSNDXVannaTheoData } = useFetch(
     theoNDXVannaParams,
@@ -166,6 +173,11 @@ export default function Home() {
           <EChartToS_Theo
             symbol={"$NDX.X"}
             data={ToSNDXVannaTheoData}
+            greek={theoGreek}
+          />
+          <EChartToS_Theo
+            symbol={"$VIX.X"}
+            data={ToSVIXVannaTheoData}
             greek={theoGreek}
           />
         </>

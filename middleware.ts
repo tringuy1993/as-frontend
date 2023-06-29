@@ -68,9 +68,9 @@ export async function middleware(request: NextRequest) {
     return authentication(request, {
       ...authConfig,
       handleValidToken: async ({ token, decodedToken }) => {
-        const url = request.nextUrl.clone();
-        console.log("ValidToken Path", url.pathname);
-        return NextResponse.rewrite(new URL(url.pathname, request.url));
+        // const url = request.nextUrl.clone();
+        // return NextResponse.rewrite(new URL(url.pathname, request.url));
+        return NextResponse.next();
       },
       handleError: async (error) => {
         console.error("Unhandled authentication error", { error });

@@ -8,9 +8,11 @@ const useAxiosPrivate = () => {
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
-      (config) => {
+      async (config) => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${tenant?.idToken}`;
+          // const newAccessToken = await refreshIdToken();
+          // console.log("NewAccessToken", newAccessToken);
         }
         return config;
       },

@@ -3,6 +3,7 @@ import { IdTokenResult } from "firebase/auth";
 import { User as FirebaseUser } from "@firebase/auth";
 import { Tenant } from "../../auth/types";
 import { filterStandardClaims } from "next-firebase-auth-edge/lib/auth/tenant";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const CREDENTIAL_ALREADY_IN_USE_ERROR = "auth/credential-already-in-use";
 export const isCredentialAlreadyInUseError = (e: AuthError) =>
@@ -51,7 +52,7 @@ export const loginWithProvider = async ({
   email,
   password,
 }: loginWithProviderProp): Promise<Tenant> => {
-  const { signInWithEmailAndPassword } = await import("firebase/auth");
+  // const { signInWithEmailAndPassword } = await import("firebase/auth");
   const result = await signInWithEmailAndPassword(auth, email, password);
   const idTokenResult = await result.user.getIdTokenResult();
   await fetch("/api/signin", {

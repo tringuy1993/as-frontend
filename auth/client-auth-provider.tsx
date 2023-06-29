@@ -3,7 +3,7 @@
 import * as React from "react";
 import { startTransition } from "react";
 import type { User as FirebaseUser } from "firebase/auth";
-import { IdTokenResult } from "firebase/auth";
+import { IdTokenResult, signOut } from "firebase/auth";
 import { useFirebaseAuth } from "./firebase";
 import { clientConfig } from "../config/client-config";
 import { Tenant } from "./types";
@@ -64,13 +64,14 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   // Call logout any time
   const handleLogout = async (): Promise<void> => {
     const auth = await getFirebaseAuth();
-    const { signOut } = await import("firebase/auth");
     await signOut(auth);
     // Removes authentication cookies
     await fetch("/api/logout", {
       method: "GET",
       mode: "same-origin",
     });
+
+    localStorage.clear();
 
     router.refresh();
   };
@@ -81,6 +82,7 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   //   router.push("/home");
   // };
   const handleLogin = async (e: loginWithProviderProp): Promise<void> => {
+    // const params = useSearchParams();
     setLoading(true);
     const auth = await getFirebaseAuth();
     await loginWithProvider({
@@ -89,16 +91,13 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
       password: e.password,
     })
       .then(() => {
-        const params = useSearchParams();
         setLoading(false);
         router.push("/home");
-        // router.refresh();
+        // console.log(`pushed home page ${router}`);
       })
-      .catch((error) => {});
-
-    router.push("/home");
-    setLoading(false);
-    router.push("/home");
+      .catch((error) => {
+        alert(`you got an error buddy: ${error}`);
+      });
   };
 
   const handleIdTokenChanged = async (firebaseUser: FirebaseUser | null) => {
@@ -131,9 +130,25 @@ export const AuthProvider: React.FunctionComponent<AuthProviderProps> = ({
   };
 
   const refreshIdToken = async () => {
-    const auth = await getFirebaseAuth();
-    return auth.currentUser?.getIdToken(true);
+    const response = await fetch("/api/refresh-tokens", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${tenant?.idToken}`,
+      },
+      mode: "same-origin",
+    });
+    if (response.ok) {
+      const data = await response.json();
+      // Process the data or return it
+      return data;
+    } else {
+      // Handle the error when the fetch request fails
+      throw new Error("Failed to refresh id token");
+    }
+    // const auth = await getFirebaseAuth();
+    // return auth.currentUser?.getIdToken(true);
   };
+
   React.useEffect(() => {
     const unsubscribePromise = registerChangeListener();
     return () => {

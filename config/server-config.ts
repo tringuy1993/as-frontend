@@ -22,6 +22,7 @@ export const authConfig: AuthenticationOptions = {
     secure: serverConfig.useSecureCookies, // Set this to true on HTTPS environments
     sameSite: "lax" as const,
     maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
+    // maxAge: 60,
   },
   serviceAccount: serverConfig.serviceAccount,
 };
