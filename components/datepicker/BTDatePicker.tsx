@@ -42,11 +42,11 @@ export default function BTDatePicker({
           // value={date_start}
           className={classes.input}
           placeholder="Pick Expiration Date"
-          firstDayOfWeek="sunday"
+          firstDayOfWeek={0}
           clearable={false}
           excludeDate={BackTest ? null : disableDatesBeforeThisWeek}
           allowSingleDateInRange
-          value={dateRange}
+          // value={dateRange}
           {...form.getInputProps("dateRange")}
         ></DatePickerInput>
         <Button type="submit"> Submit Date </Button>

@@ -52,32 +52,6 @@ export async function middleware(request: NextRequest) {
       },
     });
   }
-  if (
-    //Check if logged in to move forward
-    request.nextUrl.pathname.startsWith("/home") ||
-    request.nextUrl.pathname.startsWith("/greektime") ||
-    request.nextUrl.pathname.startsWith("/backtest")
-  ) {
-    const authCookie = request.cookies.get("AuthToken");
-    if (!authCookie) {
-      console.log("Inside nonAuth", url.pathname);
-      url.searchParams.set("redirect", url.pathname);
-      request.nextUrl.pathname = "/signin";
-      return NextResponse.redirect(request.nextUrl);
-    }
-    return authentication(request, {
-      ...authConfig,
-      handleValidToken: async ({ token, decodedToken }) => {
-        // const url = request.nextUrl.clone();
-        // return NextResponse.rewrite(new URL(url.pathname, request.url));
-        return NextResponse.next();
-      },
-      handleError: async (error) => {
-        console.error("Unhandled authentication error", { error });
-        return redirectToLogin(request);
-      },
-    });
-  }
   return NextResponse.next();
 }
 

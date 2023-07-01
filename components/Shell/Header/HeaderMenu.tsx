@@ -19,7 +19,7 @@ import { useStyles } from "./HeaderMenuStyle";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
 import Link from "next/link";
-import { useAuth } from "@/auth/hooks";
+import { useFBAuth } from "@/auth/FBAuthContext";
 
 const menuItems = [
   { href: "/home", text: "Home", prefetch: false },
@@ -36,9 +36,11 @@ const logInMenu = (user, logoutUser, menuType) => {
             <IoLogOut className="icon" />
           </ActionIcon>
         ) : (
-          <ActionIcon component="a" href="/signin">
-            <BsFillPersonFill className="icon" />
-          </ActionIcon>
+          <Link href="/signin" prefetch={true} key="signinLink">
+            <ActionIcon>
+              <BsFillPersonFill className="icon" />
+            </ActionIcon>
+          </Link>
         )}
       </>
     );
@@ -68,7 +70,7 @@ const HeaderMenu = () => {
     useDisclosure(false);
   const [opened, { open, close }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-  const { tenant, logoutUser } = useAuth();
+  const { user, logoutUser } = useFBAuth();
 
   const pinned = useHeadroom({ fixedAt: 110 });
 
@@ -76,7 +78,7 @@ const HeaderMenu = () => {
     return (
       <>
         <ThemeToggle />
-        {tenant && (
+        {user && (
           <>
             {menuItems.map((link) => (
               <Link
@@ -132,7 +134,7 @@ const HeaderMenu = () => {
           </h1>
           <Group className={classes.hiddenMobile}>
             {links()}
-            {logInMenu(tenant, logoutUser, "Main")}
+            {logInMenu(user, logoutUser, "Main")}
           </Group>
           {/* <Button onClick={openModal}>Open confirm modal</Button>; */}
           <Burger
@@ -163,7 +165,7 @@ const HeaderMenu = () => {
           ></Divider>
 
           <Group position="center" grow pb="xl" px="md">
-            {logInMenu(tenant, logoutUser, "")}
+            {logInMenu(user, logoutUser, "")}
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

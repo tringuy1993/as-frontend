@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import AllProviders from "./AllProviders";
-import { ServerAuthProvider } from "@/auth/server-auth-provider";
+// import { ServerAuthProvider } from "@/auth/server-auth-provider";
+import { FBAuthProvider } from "@/auth/FBAuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,9 @@ export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ServerAuthProvider>
+        <FBAuthProvider>
           <AllProviders>{children}</AllProviders>
-        </ServerAuthProvider>
+        </FBAuthProvider>
       </body>
     </html>
   );
