@@ -14,11 +14,13 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 import { useAuth } from "@/auth/hooks";
 import { useSignIn } from "@/auth/signin";
+import { useFBAuth } from "@/auth/FBAuthContext";
 
 export default function Signin() {
   const [hasLogged, setHasLogged] = useState(false);
   const form = useForm({ initialValues: { email: "", password: "" } });
-  const { loginUser } = useAuth();
+  // const { loginUser } = useAuth();
+  const { loginUser } = useFBAuth();
 
   return (
     <Container size={420} my={150}>
