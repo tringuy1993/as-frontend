@@ -5,7 +5,6 @@ import { IconGraph, IconTable } from "@tabler/icons-react";
 import { useBTTimePickerStore } from "@/store";
 import { BackTestCharts } from "./components/BackTestCharts";
 import { OptionChain } from "./components/OptionChain";
-import { useBTSelectedLegsStore } from "@/store/btSelectedLegs";
 
 const BackTest = () => {
   const { BackTestTime } = useBTTimePickerStore();
