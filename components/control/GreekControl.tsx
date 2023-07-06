@@ -1,10 +1,9 @@
 import { SegmentedControl } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 
-const GreekControl: React.FC = () => {
+const GreekControl: FC = () => {
   // const [value] = useLocalStorage({ key: "greek-control" });
-  const [test, setTest] = useState();
   const [greekControl, setGreekControl] = useLocalStorage({
     key: "greek-control",
     defaultValue: "NonTheo",

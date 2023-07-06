@@ -1,7 +1,15 @@
+import { useBTTimePickerStore } from "@/store";
 import { Slider } from "@mantine/core";
 import { useState } from "react";
 
-function TimeSlider({ onTimeChange }) {
+function TimeSlider() {
+  // const [currentTime, setCurrentTime] = useState("09:31:00");
+  // const handleTimeChange2 = (time) => {
+  //   setCurrentTime(time);
+  // };
+
+  const { updateBackTestTime } = useBTTimePickerStore();
+
   const startTime = new Date();
   startTime.setHours(9, 31, 0, 0);
   const endTime = new Date();
@@ -24,7 +32,7 @@ function TimeSlider({ onTimeChange }) {
 
   const handleSliderChange = (value) => {
     setCurrentTimeValue(value);
-    onTimeChange(timeRange[value]);
+    updateBackTestTime(timeRange[value]);
   };
 
   return (

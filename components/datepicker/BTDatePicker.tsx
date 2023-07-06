@@ -1,41 +1,26 @@
 import { DatePickerInput } from "@mantine/dates";
 import { Button, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { startOfWeek } from "date-fns";
 import { useStyles } from "./DatePickerStyle";
+import { useBTDatePickerStore } from "@/store/btDatePickerStore";
 
-function getNextFriday2(date = new Date()) {
-  const dateCopy = new Date(date.getTime());
-
-  const nextFriday = new Date(
-    dateCopy.setDate(
-      dateCopy.getDate() + ((7 - dateCopy.getDay() + 5) % 7 || 7)
-    )
-  );
-
-  return nextFriday;
-}
-
-function disableDatesBeforeThisWeek(date) {
-  return date < startOfWeek(new Date(), { weekStartsOn: 0 });
-}
-
-export default function BTDatePicker({
-  dateRange,
-  onSubmit,
-  BackTest,
-  date_start,
-}) {
+export default function BTDatePicker() {
   //Work!
   const { classes } = useStyles();
+  const { BackTestDate, updateBackTestDate } = useBTDatePickerStore();
+
+  const handleSubmit = (selectedDateRange) => {
+    console.log("HandleSubmit", selectedDateRange);
+    updateBackTestDate(selectedDateRange.dateRange);
+  };
   const form = useForm({
     initialValues: {
-      dateRange: dateRange,
+      dateRange: BackTestDate,
     },
   });
 
   return (
-    <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+    <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Group align={"center"} justify={"center"} className={classes.group}>
         <DatePickerInput
           type="range"
@@ -44,7 +29,6 @@ export default function BTDatePicker({
           placeholder="Pick Expiration Date"
           firstDayOfWeek={0}
           clearable={false}
-          excludeDate={BackTest ? null : disableDatesBeforeThisWeek}
           allowSingleDateInRange
           // value={dateRange}
           {...form.getInputProps("dateRange")}
