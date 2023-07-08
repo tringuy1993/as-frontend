@@ -21,7 +21,8 @@ type optionInfo = {
   ask: number;
   gamma: number;
   delta: number;
-  expiration: any;
+  expiration: string;
+  quote_datetime: string;
 };
 type PutCallData = {
   put: optionInfo;
@@ -71,6 +72,7 @@ const renderPutITM = ({ cell, row }) => (
 );
 
 // Styling: https://www.mantine-react-table.com/docs/examples/advanced
+
 export const OptionChain = () => {
   const { BackTestDate } = useBTDatePickerStore();
   const { BackTestTime } = useBTTimePickerStore();
@@ -126,6 +128,42 @@ export const OptionChain = () => {
     pagination.pageIndex,
     pagination.pageSize,
   ]);
+
+  //Handling update Legs:
+  function handleUpdateLegs(event, cell, row) {
+    const buy_type = cell.id.includes("bid") ? "bid" : "ask";
+    const option_type = cell.id.includes("call") ? "call" : "put";
+    console.log("Row:", row.original);
+
+    if (event.ctrlKey) {
+      if (cell.id.includes("bid") || cell.id.includes("ask")) {
+        addLegs({
+          buy_type: buy_type,
+          option_type: option_type,
+          price:
+            buy_type === "bid"
+              ? -1 * row.original[option_type][buy_type]
+              : row.original[option_type][buy_type],
+          strike: row.original[option_type]["strike"],
+          quote_datetime: row.original[option_type]["quote_datetime"],
+          expiration: row.original[option_type]["expiration"],
+        });
+      }
+    } else if (cell.id.includes("bid") || cell.id.includes("ask")) {
+      removeAllLegs();
+      addLegs({
+        buy_type: buy_type,
+        option_type: option_type,
+        price:
+          buy_type === "bid"
+            ? -1 * row.original[option_type][buy_type]
+            : row.original[option_type][buy_type],
+        strike: row.original[option_type]["strike"],
+        quote_datetime: row.original[option_type]["quote_datetime"],
+        expiration: row.original[option_type]["expiration"],
+      });
+    }
+  }
 
   const columns = useMemo<MRT_ColumnDef<PutCallData>[]>(
     () => [
@@ -219,37 +257,7 @@ export const OptionChain = () => {
     mantineTableHeadCellProps: { align: "center" },
     mantineTableBodyCellProps: ({ cell, row }) => ({
       //implement row selection click events manually
-      onClick: (event) => {
-        const buy_type = cell.id.includes("bid") ? "bid" : "ask";
-        const option_type = cell.id.includes("call") ? "call" : "put";
-        if (event.ctrlKey) {
-          cell.id.includes("bid") || cell.id.includes("ask")
-            ? addLegs({
-                buy_type: buy_type,
-                option_type: option_type,
-                price:
-                  buy_type === "bid"
-                    ? -1 * row.original[`${option_type}`][`${buy_type}`]
-                    : row.original[`${option_type}`][`${buy_type}`],
-                strike: row.original[`${option_type}`]["strike"],
-                expiration: row.original[`${option_type}`]["expiration"],
-              })
-            : null;
-        } else if (cell.id.includes("bid") || cell.id.includes("ask")) {
-          removeAllLegs();
-          addLegs({
-            buy_type: buy_type,
-            option_type: option_type,
-            price:
-              buy_type === "bid"
-                ? -1 * row.original[`${option_type}`][`${buy_type}`]
-                : row.original[`${option_type}`][`${buy_type}`],
-            strike: row.original[`${option_type}`]["strike"],
-            expiration: row.original[`${option_type}`]["expiration"],
-          });
-        } else {
-        }
-      },
+      onClick: (event) => handleUpdateLegs(event, cell, row),
       sx: {
         cursor: "pointer",
         textAlign: "center",

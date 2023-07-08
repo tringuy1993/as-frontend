@@ -10,6 +10,7 @@ type StateData = {
   option_type: string;
   price: number;
   expiration: string;
+  quote_datetime: string;
   strike: number;
 };
 
