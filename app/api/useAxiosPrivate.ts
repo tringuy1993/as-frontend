@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { axiosPrivate } from "./axios";
-import { useAuth } from "@/auth/hooks";
-// import {FBAuth} from "@/auth/FBfirebase"
 import { useFBAuth } from "@/auth/FBAuthContext";
 
 const useAxiosPrivate = () => {

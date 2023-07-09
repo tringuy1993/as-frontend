@@ -1,29 +1,5 @@
 import { create } from "zustand";
-// type State = {
-//   BackTestDate: Date[];
-// };
-// type Action = {
-//   updateBackTestDate: (BackTestDate: State["BackTestDate"]) => void;
-// };
-type StateData = {
-  buy_type: string;
-  option_type: string;
-  price: number;
-  expiration: string;
-  quote_datetime: string;
-  strike: number;
-};
-
-type State = {
-  legs: StateData[];
-  legsPriceSum: number;
-};
-
-type Actions = {
-  addLegs: (addedLeg: StateData) => void;
-  removeAllLegs: () => void;
-  setOrder: () => void;
-};
+import type { State, Actions, OrderData } from "./types";
 
 export const useBTSelectedLegsStore = create<State & Actions>((set) => ({
   legs: [],
@@ -46,15 +22,11 @@ export const useBTSelectedLegsStore = create<State & Actions>((set) => ({
     const allLegs = useBTSelectedLegsStore.getState().legs;
     const sum = useBTSelectedLegsStore.getState().legsPriceSum;
     useBTOrderStore.setState({
-      order: { legs: allLegs, total: Number(sum.toFixed(2)) },
+      order: { legs: allLegs, orderCost: Number(sum.toFixed(2)) },
     });
   },
 }));
 
-type OrderData = {
-  order: { legs: StateData[]; total: number };
-};
-
 export const useBTOrderStore = create<OrderData>((set) => ({
-  order: { legs: [], total: 0 },
+  order: { legs: [], orderCost: 0 },
 }));

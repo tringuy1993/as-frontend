@@ -1,11 +1,9 @@
+"use client";
 import { useEffect, useMemo, useState } from "react";
 import {
   MantineReactTable,
   useMantineReactTable,
   type MRT_ColumnDef,
-  MRT_ColumnFiltersState,
-  MRT_SortingState,
-  MRT_PaginationState,
 } from "mantine-react-table";
 import { Box } from "@mantine/core";
 import { useBTDatePickerStore } from "@/store/btDatePickerStore";
@@ -13,20 +11,13 @@ import { useBTTimePickerStore } from "@/store";
 import { format } from "date-fns";
 import { BACKTEST_OPT_CHAIN } from "@/app/api/apiURLs";
 import useAxiosPrivate from "@/app/api/useAxiosPrivate";
-import { useBTSelectedLegsStore } from "@/store/btSelectedLegs";
+import { useBTSelectedLegsStore } from "@/store/BTOrders/btSelectedLegStore";
 import { OrderEntry } from "./OrderEntry";
-type optionInfo = {
-  strike: number;
-  bid: number;
-  ask: number;
-  gamma: number;
-  delta: number;
-  expiration: string;
-  quote_datetime: string;
-};
+import type { OrderState } from "@/store/BTOrders/types";
+
 type PutCallData = {
-  put: optionInfo;
-  call: optionInfo;
+  put: OrderState;
+  call: OrderState;
 };
 
 const renderCallITM = ({ cell, row }) => (
@@ -76,21 +67,11 @@ const renderPutITM = ({ cell, row }) => (
 export const OptionChain = () => {
   const { BackTestDate } = useBTDatePickerStore();
   const { BackTestTime } = useBTTimePickerStore();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<PutCallData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRefetching, setIsRefetching] = useState(false);
   const [isError, setIsError] = useState(false);
   const { addLegs, removeAllLegs } = useBTSelectedLegsStore();
-
-  //table state
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
-    []
-  );
-  const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [pagination, setPagination] = useState<MRT_PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
 
   const params = {
     trade_date: format(BackTestDate[0], "yyyy-MM-dd"),
@@ -105,6 +86,8 @@ export const OptionChain = () => {
       const response = await axiosPrivate(BACKTEST_OPT_CHAIN, { params });
       const data = await response?.data.data;
       const mergedData = [];
+
+      //Need to modify data layout
       for (let i = 0; i < data["call"].length; i++) {
         mergedData.push({ put: data["put"][i], call: data["call"][i] });
       }
@@ -120,26 +103,18 @@ export const OptionChain = () => {
   };
   useEffect(() => {
     fetchData();
-  }, [
-    BackTestDate,
-    BackTestTime,
-    sorting,
-    columnFilters,
-    pagination.pageIndex,
-    pagination.pageSize,
-  ]);
+  }, [BackTestDate, BackTestTime]);
 
   //Handling update Legs:
   function handleUpdateLegs(event, cell, row) {
     const buy_type = cell.id.includes("bid") ? "bid" : "ask";
     const option_type = cell.id.includes("call") ? "call" : "put";
-    console.log("Row:", row.original);
 
     if (event.ctrlKey) {
       if (cell.id.includes("bid") || cell.id.includes("ask")) {
         addLegs({
           buy_type: buy_type,
-          option_type: option_type,
+          option_type: option_type === "call" ? true : false,
           price:
             buy_type === "bid"
               ? -1 * row.original[option_type][buy_type]
@@ -153,7 +128,7 @@ export const OptionChain = () => {
       removeAllLegs();
       addLegs({
         buy_type: buy_type,
-        option_type: option_type,
+        option_type: option_type === "call" ? true : false,
         price:
           buy_type === "bid"
             ? -1 * row.original[option_type][buy_type]
@@ -282,9 +257,10 @@ export const OptionChain = () => {
   });
 
   return (
-    <>
+    <Box>
+      <h1>Option Chain</h1>
       <MantineReactTable table={table} />
       <OrderEntry />
-    </>
+    </Box>
   );
 };

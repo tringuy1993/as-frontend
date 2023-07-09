@@ -17,3 +17,5 @@ export const ANSWER_URL = process.env.NEXT_PUBLIC_ANSWER_URL!;
 export const BACKTEST_URL = process.env.NEXT_PUBLIC_BACKTEST_URL!;
 export const BACKTEST_AVAIL_DATE = process.env.NEXT_PUBLIC_BACKTEST_AVAIL_DATE!;
 export const BACKTEST_OPT_CHAIN = process.env.NEXT_PUBLIC_BACKTEST_OPT_CHAIN!;
+export const BACKTEST_TRACK_ORDER =
+  process.env.NEXT_PUBLIC_BACKTEST_TRACK_ORDER!;

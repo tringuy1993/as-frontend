@@ -1,7 +1,3 @@
-import {
-  useBTOrderStore,
-  useBTSelectedLegsStore,
-} from "@/store/btSelectedLegs";
 import { Box, Button, Stack } from "@mantine/core";
 import {
   type MRT_ColumnDef,
@@ -10,17 +6,17 @@ import {
 } from "mantine-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { Monitor } from "./Monitor";
+import { useBTSelectedLegsStore } from "@/store";
 
 type StateData = {
-  buy_type: string;
-  option_type: string;
+  quote_datetime: string;
+  option_type: boolean;
   price: number;
   expiration: string;
   strike: number;
 };
 export const OrderEntry = () => {
   const { legs, legsPriceSum, setOrder } = useBTSelectedLegsStore();
-  // const { order } = useBTOrderStore();
   const [data, setData] = useState(legs);
 
   useEffect(() => {
@@ -31,8 +27,8 @@ export const OrderEntry = () => {
   const columns = useMemo<MRT_ColumnDef<StateData>[]>(
     () => [
       {
-        accessorKey: "buy_type", //access nested data with dot notation
-        header: "Side",
+        accessorKey: "quote_datetime",
+        header: "Trade Time",
       },
       {
         accessorKey: "expiration",
@@ -43,7 +39,9 @@ export const OrderEntry = () => {
         header: "Strike",
       },
       {
-        accessorKey: "option_type",
+        accessorFn: (row) => {
+          return row.option_type === true ? "call" : "put";
+        },
         header: "Option Type",
       },
       {
@@ -75,9 +73,9 @@ export const OrderEntry = () => {
   });
 
   return (
-    <>
+    <Box>
+      <h1> Enter Order </h1>
       <MRT_Table table={table} />
-      <Monitor />
-    </>
+    </Box>
   );
 };

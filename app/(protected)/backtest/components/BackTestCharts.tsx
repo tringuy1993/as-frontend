@@ -3,8 +3,9 @@ import useFetch from "@/app/api/useFetch";
 import { EChartBT } from "@/components";
 import EChartBT_Theo from "@/components/ECharts/BackTest/EChartBT_Theo";
 import { useBTDatePickerStore, useBTTimePickerStore } from "@/store";
-import { Card, Grid } from "@mantine/core";
+import { Box, Card, Grid } from "@mantine/core";
 import { format } from "date-fns";
+import { Monitor } from "./Monitor";
 
 export const BackTestCharts = () => {
   const { BackTestDate } = useBTDatePickerStore();
@@ -21,27 +22,30 @@ export const BackTestCharts = () => {
   const { data } = useFetch(params, BACKTEST_URL, update_param, updateInterval);
 
   return (
-    <Grid>
-      <Grid.Col sm={12} md={6}>
-        <Card bg="transparent">
-          <EChartBT_Theo data={data} greek={"gamma"} />
-        </Card>
-      </Grid.Col>
-      <Grid.Col sm={12} md={6}>
-        <Card bg="transparent">
-          <EChartBT data={data} greek={"gamma"} />
-        </Card>
-      </Grid.Col>
-      <Grid.Col sm={12} md={6}>
-        <Card bg="transparent">
-          <EChartBT data={data} greek={"vanna"} />
-        </Card>
-      </Grid.Col>
-      <Grid.Col sm={12} md={6}>
-        <Card bg="transparent">
-          <EChartBT data={data} greek={"delta"} />
-        </Card>
-      </Grid.Col>
-    </Grid>
+    <Box>
+      <Monitor />
+      <Grid>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT_Theo data={data} greek={"gamma"} />
+          </Card>
+        </Grid.Col>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT data={data} greek={"gamma"} />
+          </Card>
+        </Grid.Col>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT data={data} greek={"vanna"} />
+          </Card>
+        </Grid.Col>
+        <Grid.Col sm={12} md={6}>
+          <Card bg="transparent">
+            <EChartBT data={data} greek={"delta"} />
+          </Card>
+        </Grid.Col>
+      </Grid>
+    </Box>
   );
 };
