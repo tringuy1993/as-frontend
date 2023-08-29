@@ -5,7 +5,7 @@ import { EChart0DTE_Opts } from "./EChart0DTE_Opts";
 import { EChartThemed } from "../EChartThemed";
 
 const EChart0DTE = ({ data }) => {
-  let ecOptions, ecVoloptions;
+  let ecOptions;
   if (data) {
     ecOptions = EChart0DTE_Opts(data);
   }
@@ -14,12 +14,6 @@ const EChart0DTE = ({ data }) => {
     <Grid>
       <Grid.Col sm={12} md={6}>
         <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />
-      </Grid.Col>
-      <Grid.Col sm={12} md={6}>
-        <EChartThemed
-          option={{ ...ecVoloptions }}
-          style={{ height: "650px" }}
-        />
       </Grid.Col>
     </Grid>
   );

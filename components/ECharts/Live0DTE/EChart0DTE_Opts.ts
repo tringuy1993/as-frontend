@@ -21,22 +21,22 @@ export function EChart0DTE_Opts(chartData) {
       itemStyle: { color: colors[0] },
       name: legends[0],
     },
-    {
-      datasetIndex: 0,
-      xAxisIndex: 0,
-      type: "line",
-      barGap: "-100%",
-      itemStyle: { color: colors[1] },
-      name: legends[1],
-    },
-    {
-      datasetIndex: 0,
-      xAxisIndex: 0,
-      type: "line",
-      barGap: "-100%",
-      itemStyle: { color: colors[2] },
-      name: legends[2],
-    },
+    // {
+    //   datasetIndex: 0,
+    //   xAxisIndex: 0,
+    //   type: "line",
+    //   barGap: "-100%",
+    //   itemStyle: { color: colors[1] },
+    //   name: legends[1],
+    // },
+    // {
+    //   datasetIndex: 0,
+    //   xAxisIndex: 0,
+    //   type: "line",
+    //   barGap: "-100%",
+    //   itemStyle: { color: colors[2] },
+    //   name: legends[2],
+    // },
   ];
 
   const option = {

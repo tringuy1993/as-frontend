@@ -3,9 +3,10 @@ import useAxiosPrivate from "./useAxiosPrivate";
 
 export type resultparamsProps = {
   und_symbol: string[] | string;
-  greek: string;
-  startDate: string;
-  endDate: string;
+  greek?: string;
+  startDate?: string;
+  endDate?: string;
+  date?: string;
 };
 
 type updateParamProps = (Date[] | string)[];
