@@ -94,6 +94,14 @@ const HeaderMenu = () => {
         )}
 
         <Link
+          href="/live0dte"
+          className={classes.link}
+          prefetch={false}
+          key="/0dte"
+        >
+          0DTE
+        </Link>
+        <Link
           href="/about"
           className={classes.link}
           prefetch={false}
