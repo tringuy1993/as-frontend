@@ -2,42 +2,37 @@ import { Group, Select, UnstyledButton } from "@mantine/core";
 
 import { useStyles } from "./SelectStyles";
 import useFetch from "@/app/api/useFetch";
-import { LIVE_OTM_DATES } from "@/app/api/apiURLs";
-import useSelectedDateStore from "@/store/Live0DTE/live0DTEStore";
+import useSelectedUTickerStore from "@/store/Live0DTE/live0DTEuTickerStore";
+import { LIVE_OTM_UTICKERS } from "@/app/api/apiURLs";
 
-function SelectDate({ und_symbol }) {
+function SelectUTicker() {
   const { classes } = useStyles();
-
-  const selectedDate = useSelectedDateStore((state) => state.selectedDate);
-  const setSelectedDate = useSelectedDateStore(
-    (state) => state.setSelectedDate
+  const selectedUTicker = useSelectedUTickerStore(
+    (state) => state.selectedUTicker
+  );
+  const setSelectedUTicker = useSelectedUTickerStore(
+    (state) => state.setSelectedUTicker
   );
 
-  const PARAMS = { und_symbol: und_symbol };
   const UPDATE_INTERVAL = 0;
   const { data } = useFetch(
-    PARAMS,
-    LIVE_OTM_DATES,
-    [und_symbol],
+    {},
+    LIVE_OTM_UTICKERS,
+    [selectedUTicker],
     UPDATE_INTERVAL
   );
 
   let convertedArray;
-  const today = new Date().toISOString().split("T")[0];
 
   if (data) {
     convertedArray = data?.data.map((item) => ({
-      label: item.saved_date,
-      value: item.saved_date,
+      label: item.uticker,
+      value: item.uticker,
     }));
-    convertedArray = [
-      { label: `Live: ${today}`, value: today },
-      ...convertedArray,
-    ];
   }
 
   const handleSelectChange = (newValue) => {
-    setSelectedDate(newValue);
+    setSelectedUTicker(newValue);
   };
 
   return (
@@ -45,12 +40,12 @@ function SelectDate({ und_symbol }) {
       {data && (
         <UnstyledButton>
           <Group>
-            <>Select Date:</>
+            <>Select Ticker:</>
             <Select
               className={classes.dropdown}
               placeholder="Pick one"
               onChange={handleSelectChange}
-              value={selectedDate}
+              value={selectedUTicker}
               data={convertedArray}
             />
           </Group>
@@ -60,4 +55,4 @@ function SelectDate({ und_symbol }) {
   );
 }
 
-export default SelectDate;
+export default SelectUTicker;

@@ -10,8 +10,6 @@ const EChart0DTE = ({ data }) => {
     ecOptions = EChart0DTE_Opts(data);
   }
 
-  console.log("ECOptions:", ecOptions);
-
   return <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />;
 };
 export default EChart0DTE;
