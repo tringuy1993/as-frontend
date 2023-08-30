@@ -6,7 +6,7 @@ import useFetch from "../api/useFetch";
 import SelectDate from "@/components/selections/SelectDate";
 import useSelectedDateStore from "@/store/Live0DTE/live0DTEStore";
 import SelectUTicker from "@/components/selections/SelectUTicker";
-import useSelectedUTickerStore from "@/store/Live0DTE/live0DTEuTickerStore";
+import useSelectedUTickerStore from "@/store/Live0DTE/live0DTEUTickerStore";
 
 const Live0DTE = () => {
   const selectedDate = useSelectedDateStore((state) => state.selectedDate);
