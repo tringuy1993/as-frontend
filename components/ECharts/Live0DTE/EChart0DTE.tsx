@@ -10,12 +10,8 @@ const EChart0DTE = ({ data }) => {
     ecOptions = EChart0DTE_Opts(data);
   }
 
-  return (
-    <Grid>
-      <Grid.Col sm={12} md={6}>
-        <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />
-      </Grid.Col>
-    </Grid>
-  );
+  console.log("ECOptions:", ecOptions);
+
+  return <EChartThemed option={{ ...ecOptions }} style={{ height: "650px" }} />;
 };
 export default EChart0DTE;
