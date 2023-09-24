@@ -54,7 +54,7 @@ export default function GreekTime() {
     if (selectTicker === "ES") {
       modified_data = combineESOptionData(data, selectedGreek);
     } else {
-      modified_data = modify_time_data(data, selectedGreek).modified_data;
+      modified_data = modify_time_data(data?.data, selectedGreek).modified_data;
     }
   }
 

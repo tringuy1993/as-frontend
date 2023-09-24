@@ -2,7 +2,7 @@ import { Group, Select, UnstyledButton } from "@mantine/core";
 
 import { useStyles } from "./SelectStyles";
 import useFetch from "@/app/api/useFetch";
-import useSelectedUTickerStore from "@/store/Live0DTE/live0DTEuTickerStore";
+import useSelectedUTickerStore from "@/store/Live0DTE/live0DTEUTickerStore";
 import { LIVE_OTM_UTICKERS } from "@/app/api/apiURLs";
 
 function SelectUTicker() {
