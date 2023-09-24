@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getNextFriday2, req_params } from "../utilitiesProtected";
 import { DatePicker, SelectGreek, SelectTicker } from "@/components";
 import { ALL_URL, ES_URL } from "@/app/api/apiURLs";
@@ -34,29 +34,29 @@ export default function GreekTime() {
   const updateInterval = 0;
   let params = req_params(selectTicker, selectedGreek, finalDate);
   params["all"] = false;
-  const key_params = {
-    ES: ES_URL,
-    "$SPX.X": ALL_URL,
-    SPY: ALL_URL,
-    "$VIX.X": ALL_URL,
-    "$NDX.X": ALL_URL,
-    QQQ: ALL_URL,
-  };
-  const { data } = useFetch(
+  const {data, isLoading} = useFetch(
     params,
-    `${key_params[selectTicker]}`,
+    // selectTicker === 'ES' ? ES_URL : ALL_URL,
+    ALL_URL,
     update_param,
     updateInterval
   );
 
   let modified_data;
+  // console.log("DATA Outside", data, isLoading)
   if (data) {
-    if (selectTicker === "ES") {
-      modified_data = combineESOptionData(data, selectedGreek);
-    } else {
+    // console.log(isLoading, data)
+    // if (selectTicker === "ES") {
+      // modified_data = combineESOptionData(data, selectedGreek);
+    // } else {
       modified_data = modify_time_data(data?.data, selectedGreek).modified_data;
-    }
+    // }
+    console.log(modified_data)
+
   }
+
+
+
 
   return (
     <Box style={{ textAlign: "center" }}>
@@ -64,6 +64,7 @@ export default function GreekTime() {
       <SelectGreek value={selectedGreek} onChange={handleGreekChange} />
       <SelectTicker value={selectTicker} onChange={handleTickerChange} />
       <EChartTime data={modified_data} />
+      
     </Box>
   );
 }

@@ -31,6 +31,7 @@ export function combineESOptionData(
 ): ESOptionResult[] {
   let combined_data: ESOptionResult[];
   if (data.some((obj) => "exp_date" in obj)) {
+
     const call_data = data
       .filter((data) => data.optiontype === "c")
       .map((data) => ({

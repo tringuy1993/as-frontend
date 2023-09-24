@@ -15,6 +15,12 @@ export function modify_data(data, greek) {
 }
 
 export function modify_time_data(data, greek) {
+  console.log(data[0])
+  if (data[0].hasOwnProperty('c_notion_expo')){
+      // Need index in data
+  
+    return { modified_data: data, nonzero_data: data };
+  }
   const modified_data = data?.map((data) => GetAllModifiedToSData(data, greek));
   // Need index in data
   for (let i = 0; i < modified_data.length; i++) {
