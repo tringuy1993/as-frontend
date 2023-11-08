@@ -1,6 +1,5 @@
 "use client";
 import { createContext, useState, useContext, useEffect } from "react";
-// import { useNavigate, useLocation } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -8,6 +7,7 @@ import {
 } from "firebase/auth";
 import { FBAuth } from "./FBfirebase";
 import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export const FBAuthContext = createContext();
 export const useFBAuth = () => {
@@ -15,10 +15,9 @@ export const useFBAuth = () => {
 };
 
 export const FBAuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
   const [errMsg, setErrMsg] = useState("");
-  const [pending, setPending] = useState(true);
   const router = useRouter();
+  const [user, loading] = useAuthState(FBAuth);
   let loginUser = async (e) => {
     await signInWithEmailAndPassword(FBAuth, e.email, e.password)
       .then(() => router.push("/home"))
@@ -33,31 +32,18 @@ export const FBAuthProvider = ({ children }) => {
     router.push("/signin");
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FBAuth, async (currentUser) => {
-      setUser(currentUser);
-      setPending(false);
-    });
-
-    return unsubscribe;
-  });
-
-  // Define a function to refresh the id_token
-  const refreshIdToken = async () => {
-    return await FBAuth.currentUser?.getIdToken(true);
-  };
-
   let contextData = {
     user: user,
     loginUser: loginUser,
     logoutUser: logoutUser,
+    loadingUser: loading,
     errMsg: errMsg,
-    refreshIdToken: refreshIdToken,
+    // refreshIdToken: refreshIdToken,
   };
 
   return (
     <FBAuthContext.Provider value={contextData}>
-      {!pending && children}
+      {!loading && children}
     </FBAuthContext.Provider>
   );
 };

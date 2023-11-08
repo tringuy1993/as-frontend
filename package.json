@@ -44,6 +44,7 @@
     "react": "18.2.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.1.1",
     "react-icons": "^4.8.0",
     "react-loading-hook": "^1.0.0",
     "sharp": "^0.32.1",
