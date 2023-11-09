@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivate from "./useAxiosPrivate";
+import useAxiosPrivate from "./useAxiosPrivate.tsxz";
 
 export type paramsProps = {
   trade_date: string;

@@ -1,4 +1,5 @@
 "use client";
+import { FBAuth } from "@/auth/FBfirebase";
 import {
   TextInput,
   PasswordInput,
@@ -11,16 +12,26 @@ import {
   Button,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { useAuth } from "@/auth/hooks";
-import { useSignIn } from "@/auth/signin";
-import { useFBAuth } from "@/auth/FBAuthContext";
+// import { useAuth } from "@/auth/hooks";
+// import { useSignIn } from "@/auth/signin";
+// import { useFBAuth } from "@/auth/FBAuthContext";
 
 export default function Signin() {
   const [hasLogged, setHasLogged] = useState(false);
   const form = useForm({ initialValues: { email: "", password: "" } });
   // const { loginUser } = useAuth();
-  const { loginUser } = useFBAuth();
+  // const { loginUser } = useFBAuth();
+  // const FBAuth = FBAuth;
+  let loginUser = async (e) => {
+    await signInWithEmailAndPassword(FBAuth, e.email, e.password)
+      // .then(() => router.push("/home"))
+      .catch((error) => {
+        // setErrMsg(error.code);
+        console.error(error);
+      });
+  };
 
   return (
     <Container size={420} my={150}>

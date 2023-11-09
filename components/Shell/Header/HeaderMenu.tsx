@@ -70,7 +70,7 @@ const HeaderMenu = () => {
     useDisclosure(false);
   const [opened, { open, close }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-  const { user, logoutUser } = useFBAuth();
+  // const { user, logoutUser } = useFBAuth();
 
   const pinned = useHeadroom({ fixedAt: 110 });
 
@@ -78,7 +78,7 @@ const HeaderMenu = () => {
     return (
       <>
         <ThemeToggle />
-        {user && (
+        {true && (
           <>
             {menuItems.map((link) => (
               <Link
@@ -142,7 +142,7 @@ const HeaderMenu = () => {
           </h1>
           <Group className={classes.hiddenMobile}>
             {links()}
-            {logInMenu(user, logoutUser, "Main")}
+            {/* {logInMenu(user, logoutUser, "Main")} */}
           </Group>
           {/* <Button onClick={openModal}>Open confirm modal</Button>; */}
           <Burger
@@ -173,7 +173,7 @@ const HeaderMenu = () => {
           ></Divider>
 
           <Group position="center" grow pb="xl" px="md">
-            {logInMenu(user, logoutUser, "")}
+            {/* {logInMenu(user, logoutUser, "")} */}
             <Button>Sign up</Button>
           </Group>
         </ScrollArea>

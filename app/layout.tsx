@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import AllProviders from "./AllProviders";
 // import { ServerAuthProvider } from "@/auth/server-auth-provider";
 import { FBAuthProvider } from "@/auth/FBAuthContext";
+import initAuth from "@/auth/initAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,14 +14,14 @@ export const metadata = {
 type ChildrenProps = {
   children: React.ReactNode;
 };
-
+initAuth();
 export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <FBAuthProvider>
-          <AllProviders>{children}</AllProviders>
-        </FBAuthProvider>
+        {/* <FBAuthProvider> */}
+        <AllProviders>{children}</AllProviders>
+        {/* </FBAuthProvider> */}
       </body>
     </html>
   );
