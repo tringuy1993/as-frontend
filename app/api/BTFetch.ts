@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import useAxiosPrivate from "./useAxiosPrivate.tsxz";
+import { useState } from "react";
+import AxiosPrivate from "./useAxiosPrivate";
 
 export type paramsProps = {
   trade_date: string;
@@ -14,7 +14,7 @@ export default function BTFetch(params: paramsProps, url: string) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = AxiosPrivate();
   const fetchData = async () => {
     setIsLoading(true);
     try {

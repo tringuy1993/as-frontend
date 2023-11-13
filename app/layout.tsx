@@ -1,8 +1,7 @@
 import { Inter } from "next/font/google";
 import AllProviders from "./AllProviders";
 // import { ServerAuthProvider } from "@/auth/server-auth-provider";
-import { FBAuthProvider } from "@/auth/FBAuthContext";
-import initAuth from "@/auth/initAuth";
+import { ServerAuthProvider } from "@/auth/server-auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,14 +13,14 @@ export const metadata = {
 type ChildrenProps = {
   children: React.ReactNode;
 };
-initAuth();
 export default function RootLayout({ children }: ChildrenProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <FBAuthProvider> */}
-        <AllProviders>{children}</AllProviders>
-        {/* </FBAuthProvider> */}
+        {/* @ts-expect-error https://github.com/vercel/next.js/issues/43537 */}
+        <ServerAuthProvider>
+          <AllProviders>{children}</AllProviders>
+        </ServerAuthProvider>
       </body>
     </html>
   );

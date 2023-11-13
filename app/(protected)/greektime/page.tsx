@@ -3,62 +3,12 @@ import { useCallback, useEffect, useState } from "react";
 import { getNextFriday2, req_params } from "../utilitiesProtected";
 import { DatePicker, SelectGreek, SelectTicker } from "@/components";
 import { Box } from "@mantine/core";
-import { AuthAction, useUser, withUser } from "next-firebase-auth";
 import FullPageLoader from "@/components/FullPageLoader";
-import initAuth from "@/auth/initAuth";
 import Loading from "./loading";
+import AxiosPrivate from "./axios";
 
-initAuth();
 function GreekTime() {
-  const AuthUser = useUser();
   const [data2, setData] = useState();
-
-  const fetchData = useCallback(async () => {
-    const token = await AuthUser.getIdToken();
-    // const endpoint = getAbsoluteURL('/api/example')
-    const endpoint =
-      "https://www.alpha-seekers.com/api/data/theoGreek/?und_symbol=$NDX.X&greek=gamma&startDate=2023-11-08&endDate=2023-11-10";
-    console.log(token);
-    const response = await fetch(endpoint, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-    console.log("RESPONSE:", response);
-    const data = await response.json();
-    if (!response.ok) {
-      // eslint-disable-next-line no-console
-      console.error(
-        `Data fetching failed with status ${response.status}: ${JSON.stringify(
-          data
-        )}`
-      );
-      return null;
-    }
-    console.log(data);
-    return data;
-  }, [AuthUser]);
-
-  useEffect(() => {
-    let isCancelled = false;
-    const fetchFavoriteColor = async () => {
-      const data = await fetchData();
-      if (!isCancelled) {
-        setData(data ? data?.data : "unknown :(");
-      }
-    };
-    fetchFavoriteColor();
-    const intervalId = setInterval(fetchFavoriteColor, 600000);
-    return () => {
-      // A quick but not ideal way to avoid state updates after unmount.
-      // In your app, prefer aborting fetches:
-      // https://developers.google.com/web/updates/2017/09/abortable-fetch
-      isCancelled = true;
-      clearInterval(intervalId);
-    };
-  }, [fetchData]);
-
   //Select Date
   const [selectedDateRange] = useState([new Date(), getNextFriday2()]);
   const [finalDate, setFinalDate] = useState(selectedDateRange);
@@ -77,6 +27,42 @@ function GreekTime() {
     setSelectTicker(event);
   }
 
+  const axiosFetch = AxiosPrivate();
+  // async function GetCurrentToken() {
+  //   const fetchcurrentToken = await fetch("/api/tokens");
+  //   const currentToken = await fetchcurrentToken.json().then((token) => {
+  //     return token?.tokens.token;
+  //   });
+  //   return currentToken;
+  // }
+
+  const params = req_params(selectTicker, selectedGreek, finalDate);
+  const fetchData = useCallback(async () => {
+    // const endpoint = getAbsoluteURL('/api/example')
+    // const token = GetCurrentToken();
+    const endpoint =
+      "https://www.alpha-seekers.com/api/data/greeksexposure/?und_symbol=[%22$SPX.X%22,%22SPY%22,%22QQQ%22,%22$NDX.X%22,%22$RUT.X%22]&greek=gamma&startDate=2023-11-10&endDate=2023-11-11";
+    const response = await axiosFetch.get(
+      "https://www.alpha-seekers.com/api/data/greeksexposure/",
+      {
+        params: params,
+      }
+    );
+    console.log(response?.data);
+    return response?.data;
+  }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchFavoriteColor = async () => {
+      const data = await fetchData();
+      if (!isCancelled) {
+        setData(data);
+      }
+    };
+    fetchFavoriteColor();
+  }, [fetchData]);
+
   return (
     <Box style={{ textAlign: "center" }}>
       <DatePicker dateRange={selectedDateRange} onSubmit={handleSubmit} />
@@ -87,8 +73,4 @@ function GreekTime() {
   );
 }
 
-export default withUser({
-  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  LoaderComponent: Loading,
-})(GreekTime);
+export default GreekTime;

@@ -55,7 +55,7 @@ export default function Home() {
   //Select Date
   const [selectedDateRange] = useState<Date[]>([new Date(), getNextFriday2()]);
   const [finalDate, setFinalDate] = useState<Date[]>(selectedDateRange);
-
+  console.log(finalDate);
   const handleSubmit = (selectedDateRange: DateRange): void => {
     setFinalDate(selectedDateRange.dateRange);
   };
@@ -72,31 +72,16 @@ export default function Home() {
   //Request ES Data
   const updateInterval = 30000;
   const esParams = req_params("ES", selectedGreek, finalDate);
-  const { data: ESData } = useFetch(
-    esParams,
-    ES_URL,
-    update_param,
-    updateInterval
-  );
+  const { data: ESData } = useFetch(ES_URL, esParams);
 
   //Request ToS Data
   // const tickers = ["$SPX.X"]
   const tickers = ["$SPX.X", "SPY", "QQQ", "$NDX.X", "$RUT.X"];
   const tosParams = req_params(tickers, selectedGreek, finalDate);
-  const { data: ToSData } = useFetch(
-    tosParams,
-    GREEK_EXPO_URL,
-    update_param,
-    updateInterval
-  );
+  const { data: ToSData } = useFetch(GREEK_EXPO_URL, tosParams);
 
   const theoParams = req_params("$SPX.X", "gamma", finalDate);
-  const { data: ToSTheoData } = useFetch(
-    theoParams,
-    THEO_URL,
-    update_param,
-    updateInterval
-  );
+  const { data: ToSTheoData } = useFetch(THEO_URL, theoParams);
 
   const ToSTheoData_SPX: TheoDataProps = ToSTheoData?.map(
     (data: TheoDataProps) => GetModifiedToSTheoData(data)
@@ -110,33 +95,25 @@ export default function Home() {
 
   const theoSPYVannaParams = req_params("SPY", theoGreek, finalDate);
   const { data: ToSSPYVannaTheoData } = useFetch(
-    theoSPYVannaParams,
     THEOVANNA_URL,
-    update_param,
-    0
+    theoSPYVannaParams
   );
 
   const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
   const { data: ToSSPXVannaTheoData } = useFetch(
-    theoSPXVannaParams,
     THEOVANNA_URL,
-    update_param,
-    0
+    theoSPXVannaParams
   );
 
   const theoVIXVannaParams = req_params("$VIX.X", theoGreek, finalDate);
   const { data: ToSVIXVannaTheoData } = useFetch(
-    theoVIXVannaParams,
     THEOVANNA_URL,
-    update_param,
-    0
+    theoVIXVannaParams
   );
   const theoNDXVannaParams = req_params("$NDX.X", theoGreek, finalDate);
   const { data: ToSNDXVannaTheoData } = useFetch(
-    theoNDXVannaParams,
     THEOVANNA_URL,
-    update_param,
-    0
+    theoNDXVannaParams
   );
 
   return (

@@ -2,12 +2,12 @@ import axios from "axios";
 
 const axiosApiInstance = axios.create({
   headers: { "Content-Type": "application/json" },
-  // baseURL: 'https://www.alpha-seekers.com',
+  baseURL: "https://www.alpha-seekers.com",
 });
 
 const AxiosPrivate = () => {
   async function GetCurrentToken() {
-    const fetchcurrentToken = await fetch("http://localhost:3000/api/tokens");
+    const fetchcurrentToken = await fetch("/api/tokens");
     const currentToken = await fetchcurrentToken.json().then((token) => {
       return token?.tokens.token;
     });
@@ -16,6 +16,7 @@ const AxiosPrivate = () => {
   axiosApiInstance.interceptors.request.use(
     async (config) => {
       const currentToken = await GetCurrentToken();
+      console.log("CurrentToken:", currentToken);
       if (!config.headers["Authorization"]) {
         config.headers["Authorization"] = `Bearer ${currentToken}`;
       }

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { BASE_URL } from "../api/apiURLs";
 
 const axiosBaseURL = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "http://www.alpha-seekers.com/",
   headers: { "Content-Type": "application/json" },
 });
 
@@ -21,14 +21,14 @@ const useFetch = (url: string, initialParam: object) => {
       try {
         const response = await axiosBaseURL.get(url, {
           params: params,
-          headers: { "Content-Type": "application/json" },
+          // headers: { "Content-Type": "application/json" },
         });
         setDataState({ data: response.data, loading: false, error: null });
-      } catch (error) {
+      } catch (error: any) {
         setDataState({
           data: null,
           loading: false,
-          error: error.response.data,
+          error: error.response,
         });
         console.log("FETCH ERROR");
       }

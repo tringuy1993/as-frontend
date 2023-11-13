@@ -7,7 +7,7 @@ const axiosApiInstance = axios.create({
 
 const AxiosPrivate = () => {
   async function GetCurrentToken() {
-    const fetchcurrentToken = await fetch("http://localhost:3000/api/tokens");
+    const fetchcurrentToken = await fetch("/api/tokens");
     const currentToken = await fetchcurrentToken.json().then((token) => {
       return token?.tokens.token;
     });

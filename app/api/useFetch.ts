@@ -1,47 +1,51 @@
-import { useState, useEffect } from "react";
-import useAxiosPrivate from "./useAxiosPrivate";
+import { useEffect, useState } from "react";
+import { axiosPrivateInstance, axiosPublicInstance } from "./axios";
 
-export type resultparamsProps = {
-  und_symbol: string[] | string;
-  greek?: string;
-  startDate?: string;
-  endDate?: string;
-  date?: string;
-};
-
-type updateParamProps = (Date[] | string)[];
-
-export default function useFetch(
-  params: resultparamsProps,
-  url?: string,
-  updatevalues?: updateParamProps,
-  updateInterval?: number
-) {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
-  const fetchData = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axiosPrivate(url, { params });
-      setData(response?.data);
-    } catch (error) {
-      console.error(error);
-      setError(error);
-    }
-    setIsLoading(false);
-  };
+const useFetch = (
+  url: string,
+  params: object,
+  privateMethod: true,
+  updateInterval = 1000 * 60 * 60
+) => {
+  let axios;
+  if (privateMethod) {
+    axios = axiosPrivateInstance();
+  } else {
+    axios = axiosPublicInstance;
+  }
+  const [dataState, setDataState] = useState({
+    data: null,
+    loading: true,
+    error: null,
+  });
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url, {
+          params: params,
+        });
+        setDataState({ data: response.data, loading: false, error: null });
+      } catch (error: any) {
+        setDataState({
+          data: null,
+          loading: false,
+          error: error,
+        });
+        console.log("FETCH ERROR");
+      }
+    };
+
     fetchData();
+    console.log(updateInterval);
+    const intervalId = setInterval(() => {
+      fetchData();
+    }, updateInterval);
 
-    if (updateInterval && updateInterval > 0) {
-      const intervalId = setInterval(fetchData, updateInterval);
-      return () => clearInterval(intervalId);
-    }
-    // eslint-disable-next-line
-  }, [...updatevalues]);
+    return () => clearInterval(intervalId);
+  }, [params]);
 
-  return { data, isLoading, error };
-}
+  return dataState;
+};
+
+export default useFetch;

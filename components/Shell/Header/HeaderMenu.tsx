@@ -19,7 +19,6 @@ import { useStyles } from "./HeaderMenuStyle";
 import ModalComp from "@/components/modal/Modal";
 import { Contact } from "@/components/contact/Contact";
 import Link from "next/link";
-import { useFBAuth } from "@/auth/FBAuthContext";
 
 const menuItems = [
   { href: "/home", text: "Home", prefetch: false },
