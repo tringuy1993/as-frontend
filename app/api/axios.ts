@@ -1,3 +1,4 @@
+import { useAuth } from "@/auth/context";
 import axios, { AxiosStatic } from "axios";
 
 const axiosPublicInstance = axios.create({
@@ -6,6 +7,7 @@ const axiosPublicInstance = axios.create({
 });
 
 const axiosPrivateInstance = () => {
+  const token_test = useAuth();
   async function GetCurrentToken() {
     const fetchcurrentToken = await fetch("/api/tokens");
     const currentToken = await fetchcurrentToken.json().then((token) => {

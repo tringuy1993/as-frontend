@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createMarkLine, formatNumbers } from "../UtilECharts";
 import { YF_URL } from "@/app/api/apiURLs";
-import useAxiosPrivate from "@/app/api/useAxiosPrivate";
+import useAxiosPrivate from "@/app/api/axiosInstances";
 import { EChartThemed } from "../EChartThemed";
 import { EChartsOption } from "echarts-for-react";
 

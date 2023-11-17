@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AxiosPrivate from "./useAxiosPrivate";
+import AxiosPrivate from "./axiosInstances";
 
 export type paramsProps = {
   trade_date: string;

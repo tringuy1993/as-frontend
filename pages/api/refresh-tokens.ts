@@ -7,6 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const bearerToken = req.headers["authorization"]?.split(" ")[1] ?? "";
+  console.log(bearerToken);
   // ...use bearer token to update custom claims using "firebase-admin" library and then:
 
   const { idToken, refreshToken } = await refreshAuthCookies(
@@ -15,9 +16,10 @@ export default async function handler(
     authConfig
   );
 
+  // console.log("New IDToken:", idToken);
   // Optionally do something with new `idToken` and `refreshToken`
 
-  res.status(200).json({ NewIdToken: idToken });
+  res.status(200).json({ idToken });
 }
 
 // export {handler as GET, handler as POST};

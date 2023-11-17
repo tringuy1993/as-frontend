@@ -13,5 +13,10 @@ export default async function handler(
     serviceAccount: authConfig.serviceAccount,
   });
 
-  return res.status(200).json({ tokens });
+  const returnObj = {
+    token: tokens?.token,
+    email: tokens?.decodedToken?.email,
+  };
+
+  return res.status(200).json(returnObj);
 }

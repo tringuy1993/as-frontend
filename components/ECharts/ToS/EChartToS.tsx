@@ -16,11 +16,13 @@ function convertToPST(timestampStr) {
   const pstTimestamp = new Date(timestamp.getTime() + pstOffsetMinutes * 60000);
 
   // Format the PST timestamp as a string with 'PST' at the end
-  const pstTimeStr = pstTimestamp.toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' PST');
+  const pstTimeStr = pstTimestamp
+    .toISOString()
+    .replace("T", " ")
+    .replace(/\.\d{3}Z$/, " PST");
 
   return pstTimeStr;
 }
-
 
 export default function EChartToS({ symbol, data, theoData, greek }) {
   let ecOptions, ecVoloptions;

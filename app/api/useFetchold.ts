@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import useAxiosPrivate from "./useAxiosPrivate";
+import { AxiosPrivate } from "./axiosInstances";
+// import useAxiosPrivate from "./useAxiosPrivate";
 
 export type resultparamsProps = {
   und_symbol: string[] | string;
@@ -20,7 +21,7 @@ export default function useFetch(
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const axiosPrivate = useAxiosPrivate();
+  const axiosPrivate = AxiosPrivate;
   const fetchData = async () => {
     setIsLoading(true);
     try {

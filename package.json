@@ -49,6 +49,7 @@
     "react-icons": "^4.8.0",
     "react-loading-hook": "^1.0.0",
     "sharp": "^0.32.1",
+    "swr": "^2.2.4",
     "tailwindcss": "3.3.2",
     "typed.js": "^2.0.16",
     "typescript": "5.0.4",

@@ -10,7 +10,7 @@ import { useBTDatePickerStore } from "@/store/btDatePickerStore";
 import { useBTTimePickerStore } from "@/store";
 import { format } from "date-fns";
 import { BACKTEST_OPT_CHAIN } from "@/app/api/apiURLs";
-import useAxiosPrivate from "@/app/api/useAxiosPrivate";
+import useAxiosPrivate from "@/app/api/axiosInstances";
 import { useBTSelectedLegsStore } from "@/store/BTOrders/btSelectedLegStore";
 import { OrderEntry } from "./OrderEntry";
 import type { OrderState } from "@/store/BTOrders/types";
