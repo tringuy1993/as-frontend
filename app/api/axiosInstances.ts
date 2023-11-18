@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./apiURLs";
+import refreshToken from "./useRefreshToken";
 
 async function GetCurrentToken() {
   const fetchcurrentToken = await fetch("/api/tokens");
@@ -18,11 +19,11 @@ const createAxiosInstance = (withAuth = false) => {
   if (withAuth) {
     axiosInstance.interceptors.request.use(
       async (config) => {
-        // const accessToken = await GetCurrentToken();
-        // console.log(`${new Date()} InsideACCESSTOKEN:`, accessToken);
-        // if (!config.headers["Authorization"]) {
-        //   config.headers["Authorization"] = `Bearer ${accessToken}`;
-        // }
+        const accessToken = await GetCurrentToken();
+        console.log(`${new Date()} InsideACCESSTOKEN:`, accessToken);
+        if (!config.headers["Authorization"]) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
         return config;
       },
       (error) => Promise.reject(error)
@@ -42,22 +43,11 @@ const createAxiosInstance = (withAuth = false) => {
           );
           const accessToken =
             prevRequest.headers["Authorization"]?.split(" ")[1];
-          // const accessToken = await GetCurrentToken();
-          const getNewAccessToken = await fetch(
-            "http://localhost:3000/api/refresh-tokens/",
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const newAccessToken = await getNewAccessToken.json().then((data) => {
-            return data?.idToken;
-          });
+          const newAccessToken = await refreshToken(accessToken);
 
           console.log(`${new Date()} OldToken: ${accessToken}`);
           console.log(`${new Date()} NewToken: ${newAccessToken}`);
+
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosInstance(prevRequest);
         } else if (error?.response?.status > 405) {

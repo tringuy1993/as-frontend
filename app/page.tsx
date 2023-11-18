@@ -63,48 +63,33 @@ function HomePage() {
     ? selectedGreek
     : "vanna";
 
-  // const update_param = [finalDate, selectedGreek];
-  // const updateInterval = 61000;
-  // // const { data, error, isLoading } = useFetcher(GREEK_EXPO_URL, params, 10000);
-  // const { data: ToSData } = useFetch(
-  //   params,
-  //   GREEK_EXPO_URL,
-  //   update_param,
-  //   updateInterval
-  // );
-  // console.log(ToSData);
-
-  // const axiosPrivate = axiosPrivateInstance();
-  // const fetcher = (url, params) => {
-  //   return axiosPrivate.get(url, { params: params });
-  // };
   const { data, error, isLoading } = useCustomSWR(
-    // GREEK_EXPO_URL,
-    "http://localhost:3000/api/force-403",
+    GREEK_EXPO_URL,
+    // "http://localhost:3000/api/force-403",
     params,
-    100000,
+    10000 * 1,
     true
   );
 
   const [nextChart, setNextChart] = useState<JSX.Element[]>([]);
   useEffect(() => {
     if (data && !error && !isLoading) {
+      // console.log(data);
       setNextChart(
-        getChartDataList(data?.data.data, "").map(
-          ({ symbol, data, theoData }) => (
-            <EChartToS
-              key={symbol}
-              symbol={symbol}
-              data={data}
-              theoData={theoData}
-              greek={selectedGreek}
-            />
-          )
-        )
+        getChartDataList(data?.data, "").map(({ symbol, data, theoData }) => (
+          <EChartToS
+            key={symbol}
+            symbol={symbol}
+            data={data}
+            theoData={theoData}
+            greek={selectedGreek}
+          />
+        ))
       );
     }
-  }, [data, error, isLoading]);
+  }, [data, error]);
 
+  console.log(data);
   // const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
   // const { data: SPXVannaTheoData } = useFetcher(
   //   THEOVANNA_URL,
@@ -112,7 +97,7 @@ function HomePage() {
   //   60500 * 10
   // );
 
-  const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
+  // const theoSPXVannaParams = req_params("$SPX.X", theoGreek, finalDate);
   // const { data: ToSSPXVannaTheoData } = useFetch(
   //   theoSPXVannaParams,
   //   THEOVANNA_URL,

@@ -11,12 +11,14 @@ const useCustomSWR = (
 ) => {
   const auth = useAuth();
   const accessToken = auth?.user?.accessToken;
-  const fetcher = (url: string, params: any, accessToken) => {
+  const fetcher = async (url: string, params: any, accessToken) => {
     if (token) {
-      return axiosPrivateInstance?.get(url, {
+      const response = await axiosPrivateInstance?.get(url, {
         params: params,
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      console.log(response?.data);
+      return response?.data;
     } else {
       return axiosPublicInstance?.get(url, { params: params });
     }

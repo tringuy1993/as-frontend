@@ -2,31 +2,26 @@
 import { useFirebaseAuth } from "@/auth/firebase";
 import { axiosPrivateInstance } from "./axiosInstances";
 
-const useRefreshToken = () => {
+const refreshToken = async (accessToken) => {
   const { getFirebaseAuth } = useFirebaseAuth();
 
-  const refresh = async () => {
-    const auth = getFirebaseAuth();
-    const response = await axiosPrivateInstance?.get(
-      "http//:localhost:3000.com/api/custom-claims/"
-      // {
-      //   withCredentials: true,
-      // }
-    );
-    // setAuth(prev => {
-    //     console.log(JSON.stringify(prev));
-    //     console.log(response.data.accessToken);
-    //     return {
-    //         ...prev,
-    //         roles: response.data.roles,
-    //         accessToken: response.data.accessToken
-    //     }
-    // });
+  const auth = getFirebaseAuth();
+  const getNewAccessToken = await fetch(
+    "http://localhost:3000/api/refresh-tokens/",
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  await auth.currentUser!.getIdToken(true);
 
-    await auth.currentUser!.getIdToken(true);
-    return response?.data;
-  };
-  return refresh;
+  const newAccessToken = await getNewAccessToken.json().then((data) => {
+    return data?.idToken;
+  });
+
+  return newAccessToken;
 };
 
-export default useRefreshToken;
+export default refreshToken;
