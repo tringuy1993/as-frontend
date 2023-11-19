@@ -67,7 +67,7 @@ function HomePage() {
     GREEK_EXPO_URL,
     // "http://localhost:3000/api/force-403",
     params,
-    10000 * 1,
+    60000 * 1,
     true
   );
 

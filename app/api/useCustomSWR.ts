@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { axiosPrivateInstance, axiosPublicInstance } from "./axiosInstances";
-import { use } from "react";
 import { useAuth } from "@/auth/context";
+import { useRouter } from "next/navigation";
 
 const useCustomSWR = (
   url,
@@ -9,6 +9,7 @@ const useCustomSWR = (
   refreshInterval = 60000 * 10,
   token = true
 ) => {
+  const router = useRouter();
   const auth = useAuth();
   const accessToken = auth?.user?.accessToken;
   const fetcher = async (url: string, params: any, accessToken) => {
@@ -33,6 +34,10 @@ const useCustomSWR = (
       refreshInterval: refreshInterval,
     }
   );
+
+  if (error?.response?.status === 500) {
+    router.refresh();
+  }
   return { data, error, isLoading };
 };
 
