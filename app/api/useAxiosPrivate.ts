@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { axiosPrivate } from "./axios";
 import { useFBAuth } from "@/auth/FBAuthContext";
 
+import { FBAuth } from "@/auth/FBfirebase";
+
 const useAxiosPrivate = () => {
   // const { user, logoutUser, refreshIdToken } = useFBAuth();
   const { user, refreshIdToken } = useFBAuth();
@@ -10,7 +12,8 @@ const useAxiosPrivate = () => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       async (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${user?.accessToken}`;
+          const token = await FBAuth.currentUser?.getIdToken();
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
         return config;
       },
@@ -23,7 +26,7 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          const newAccessToken = await refreshIdToken();
+          const newAccessToken = await FBAuth.currentUser?.getIdToken();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         } else if (error?.response?.status > 405) {
